@@ -79,15 +79,15 @@ app.post('/create',function(req,res) {
 			"photo":req.body.photo,
 			"photo mimetype":req.body.photomimetype,
 			"address":{
-			"street":req.body.street,
-			"building":req.body.building,
-			"zipcode":req.body.zipcode,
-			"longtitude":req.body.gps1,
-			"latitude":req.body.gps2,
+			"Street":req.body.street,
+			"Building":req.body.building,
+			"Zipcode":req.body.zipcode,
+			"Longtitude":req.body.gps1,
+			"Latitude":req.body.gps2,
 			},
 			"grade":{
-			"user":null,
-			"score":null
+			"User":null,
+			"Score":null
 			},
 			"owner":req.body.owner
 			
