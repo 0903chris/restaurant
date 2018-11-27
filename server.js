@@ -86,8 +86,8 @@ app.post('/create',function(req,res) {
 			"latitude":req.body.gps2
 			},
 			"grade":{
-			"user":null,
-			"score":null
+			"user":req.body.user,
+			"score":req.body.score
 			},
 			"owner":req.body.owner
 			
