@@ -78,12 +78,13 @@ app.post('/create',function(req,res) {
 			"cuisine":req.body.cuisine,
 			"photo":req.body.photo,
 			"photo mimetype":req.body.photomimetype,
-			
+			"address":{
 			"address.street":req.body.street,
 			"address.building":req.body.building,
 			"address.zipcode":req.body.zipcode,
 			"address.longtitude":req.body.gps1,
-			"address.latitude":req.body.gps2,
+			"address.latitude":req.body.gps2
+			},
 			"grade":{
 			"user":null,
 			"score":null
