@@ -8,6 +8,17 @@ var url = 'mongodb://<dbuser>:<dbpassword>@ds149672.mlab.com:49672/chrison9';
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
+var restaurant = function(db, callback) {
+   db.collection('restaurant').insertOne( {
+	"_id" : "1",
+	"name" : "John Dole",   
+   }, function(err, result) {
+    assert.equal(err, null);
+    console.log("Inserted a document into the books collection.");
+    callback(result);
+  });
+};  
+
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
   restaurant(db, function() {
@@ -66,14 +77,3 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 app.listen(process.env.PORT || 8099);
-var restaurant = function(db, callback) {
-   db.collection('restaurant').insertOne( {
-	"_id" : "1",
-	"name" : "John Dole",   
-   }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a document into the books collection.");
-    callback(result);
-  });
-};  
-
