@@ -3,9 +3,10 @@ var express = require('express');
 var session = require('cookie-session');
 var bodyParser = require('body-parser');
 var app = express();
-
-
-
+var MongoClient = require('mongodb').MongoClient;
+var url ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
+var assert= require('assert');
+var ObjectId=require('mongodb').ObjectID;
 
 
  
@@ -14,26 +15,6 @@ app.set('view engine','ejs');
 
 var SECRETKEY1 = 'I want to pass COMPS381F';
 var SECRETKEY2 = 'Keep this to yourself';
-
-// Retrieve
-var MongoClient = require('mongodb').MongoClient;
-
-// Connect to the db
-MongoClient.connect("mongodb://df:df9999@ds149672.mlab.com:49672/chrison9", function(err, db) {
-  if(err) { return console.dir(err); }
-
-  var collection = db.collection('restaurant');
-  var doc1 = {'hello':'doc1'};
-  var doc2 = {'hello':'doc2'};
-  var lotsOfDocs = [{'hello':'doc3'}, {'hello':'doc4'}];
-
-  collection.insert(doc1);
-
-  collection.insert(doc2, {w:1}, function(err, result) {});
-
-  collection.insert(lotsOfDocs, {w:1}, function(err, result) {});
-
-});
 
 var users = new Array(
 	{name: 'demo', password: ''},
@@ -89,12 +70,9 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 
-app.post('/create',function(req,res) {
-	res.redirect('/');
-});
 
 app.post('/create',function(req,res) {
-	MongoCLient.connect(mongourl,function(err,db){
+	MongoCLient.connect(url,function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
