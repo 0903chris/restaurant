@@ -89,7 +89,7 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 
-app.post('/create',function(req,res) {
+app.post('/Create',function(req,res) {
 	res.redirect('/');
 });
 
