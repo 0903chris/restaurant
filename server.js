@@ -73,7 +73,7 @@ app.post('/create',function(req,res) {
 	MongoClient.connect(url,function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
-			
+			"name":req.body.name,
 			"cuisine":req.body.cuisine
 			
 			
