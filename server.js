@@ -3,9 +3,8 @@ var session = require('cookie-session');
 var bodyParser = require('body-parser');
 var app = express();
 var http = require('http');
-var url = require('url');
-var fs = require('fs');
-var formidable = require('formidable');
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://<dbuser>:<dbpassword>@ds149672.mlab.com:49672/chrison9';
 
 app = express();
 app.set('view engine','ejs');
@@ -57,5 +56,22 @@ app.get('/logout',function(req,res) {
 	req.session = null;
 	res.redirect('/');
 });
-  
+var insertDocument = function(db, callback) {
+   db.collection('books').insertOne( {
+	"name" : "Introduction to Node.js",
+	"author" : "John Dole",
+	"price" : 75.00,
+	"stock" : 0      
+   }, function(err, result) {
+    assert.equal(err, null);
+    console.log("Inserted a document into the books collection.");
+    callback(result);
+  });
+};  
 app.listen(process.env.PORT || 8099);
+MongoClient.connect(url, function(err, db) {
+  
+     if(!err){
+	     console.log("We are connect");
+ 
+});
