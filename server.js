@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://chrison9:4988170903lok@ds149672.mlab.com:49672/chrison9';
+var url = 'mongodb://demo:demodemo9@ds149672.mlab.com:49672/chrison9';
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
