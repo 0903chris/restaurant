@@ -34,7 +34,7 @@ app.get('/',function(req,res) {
 		res.redirect('/login');
 	} else {
 		res.status(200);
-		res.render('restaurants',{name:req.session.username});
+		res.render('secrets',{name:req.session.username});
 	}
 });
 
@@ -57,4 +57,11 @@ app.get('/logout',function(req,res) {
 	req.session = null;
 	res.redirect('/');
 });
-
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
+    res.write('<input type="file" name="filetoupload"><br>');
+    res.write('<input type="submit">');
+    res.write('</form>');
+    res.end();
+  }
+app.listen(process.env.PORT || 8099);
