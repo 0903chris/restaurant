@@ -79,7 +79,7 @@ app.post('/create',function(req,res) {
 			"photo":req.body."no.jpg",
 			"photo mimetype":"asdah",
 			
-			"owner":req.body.owner
+			
 			
 						      });
 		});
