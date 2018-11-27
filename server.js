@@ -5,6 +5,8 @@ var app = express();
 var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://<dbuser>:<dbpassword>@ds149672.mlab.com:49672/chrison9';
+var assert = require('assert');
+var ObjectId = require('mongodb').ObjectID;
 
 app = express();
 app.set('view engine','ejs');
@@ -56,22 +58,21 @@ app.get('/logout',function(req,res) {
 	req.session = null;
 	res.redirect('/');
 });
-var insertDocument = function(db, callback) {
+app.listen(process.env.PORT || 8099);
+var restaurant = function(db, callback) {
    db.collection('books').insertOne( {
-	"name" : "Introduction to Node.js",
-	"author" : "John Dole",
-	"price" : 75.00,
-	"stock" : 0      
+	"_id" : "Introduction to Node.js",
+	"name" : "John Dole",   
    }, function(err, result) {
     assert.equal(err, null);
     console.log("Inserted a document into the books collection.");
     callback(result);
   });
 };  
-app.listen(process.env.PORT || 8099);
+
 MongoClient.connect(url, function(err, db) {
-  
-     if(!err){
-	     console.log("We are connect");
-     }
+  assert.equal(null, err);
+  restaurant(db, function() {
+      db.close();
+  });
 });
