@@ -1,36 +1,39 @@
+
 var express = require('express');
 var session = require('cookie-session');
 var bodyParser = require('body-parser');
 var app = express();
-var http = require('http');
-var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://demo:demodemo9@ds149672.mlab.com:49672/chrison9';
-var assert = require('assert');
-var ObjectId = require('mongodb').ObjectID;
 
-var restaurant = function(db, callback) {
-   db.collection('restaurant').insertOne( {
-	"_id" : "1",
-	"name" : "John Dole",   
-   }, function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a document into the books collection.");
-    callback(result);
-  });
-};  
 
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  restaurant(db, function() {
-      db.close();
-  });
-});
 
+
+
+ 
 app = express();
 app.set('view engine','ejs');
 
 var SECRETKEY1 = 'I want to pass COMPS381F';
 var SECRETKEY2 = 'Keep this to yourself';
+
+// Retrieve
+var MongoClient = require('mongodb').MongoClient;
+
+// Connect to the db
+MongoClient.connect("mongodb://demo:demodemo9@ds149672.mlab.com:49672/chrison9", function(err, db) {
+  if(err) { return console.dir(err); }
+
+  var collection = db.collection('restaurant');
+  var doc1 = {'hello':'doc1'};
+  var doc2 = {'hello':'doc2'};
+  var lotsOfDocs = [{'hello':'doc3'}, {'hello':'doc4'}];
+
+  collection.insert(doc1);
+
+  collection.insert(doc2, {w:1}, function(err, result) {});
+
+  collection.insert(lotsOfDocs, {w:1}, function(err, result) {});
+
+});
 
 var users = new Array(
 	{name: 'demo', password: ''},
@@ -45,7 +48,6 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 
 app.get('/',function(req,res) {
 	console.log(req.session);
@@ -53,12 +55,22 @@ app.get('/',function(req,res) {
 		res.redirect('/login');
 	} else {
 		res.status(200);
-		res.render('restaurant',{name:req.session.username});
+		res.render('restaurants',{name:req.session.username});
+	}
+});
+
+app.get('/create',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} else {
+		res.status(200);
+		res.render('create',{name:req.session.username});
 	}
 });
 
 app.get('/login',function(req,res) {
-	res.sendFile(__dirname + '/public/login.html');
+	res.sendFile(__dirname + '/login.html');
 });
 
 app.post('/login',function(req,res) {
@@ -76,4 +88,10 @@ app.get('/logout',function(req,res) {
 	req.session = null;
 	res.redirect('/');
 });
+
+app.post('/create',function(req,res) {
+	res.redirect('/');
+});
+
+
 app.listen(process.env.PORT || 8099);
