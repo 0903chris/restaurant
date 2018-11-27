@@ -1,10 +1,49 @@
 <html>
-   <body>
-      <H1>Hello, <%= name %></H1>
-      <H2>This is a secret page!</H2>
-      <a href="/new">
-        <button>Create New Restaurant</button>
-      </a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <title>Restaurant</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style type="text/css">
+  .well {
+      background: none;
+      height: 320px;
+  }
+  .table-scroll tbody {
+      position: absolute;
+      overflow-y: scroll;
+      height: 250px;
+  }
+  .table-scroll tr {
+      width: 100%;
+      table-layout: fixed;
+      display: inline-table;
+  }
+  .table-scroll thead > tr > th {
+      border: none;
+  }
+</style>
+
+   <body>
+    <div class="jumbotron text-center container=fluid">
+      <H1>Restaurants</H1>
+      <p>User: <%= name %></p>
+      </div>
+      <div class="container-fluid">
+    <div class="row">
+      <a href="/create">
+        <button class="btn btn-default">Create New Restaurant</button>
+      </a>
+    </div>
    </body>
 </html>
