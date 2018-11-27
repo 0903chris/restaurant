@@ -77,7 +77,7 @@ app.post('/create',function(req,res) {
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
 			"photo":req.body."no.jpg",
-			"photo mimetype":"asdah",
+			"photo mimetype":"asdah"
 			
 			
 			
