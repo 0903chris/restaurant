@@ -72,10 +72,10 @@ app.get('/logout',function(req,res) {
 app.post('/create',function(req,res) {
 	MongoClient.connect(url,function(err,db){
 		assert.equal(err,null);
-		db.collection(restaurant).insertOne({
-			"name":req.body.name,
-			"borough":req.body.borough,
-			"cuisine":req.body.cuisine,
+		db.collection('restaurant').insertOne({
+			"name":req.body.Name,
+			"borough":req.body.Borough,
+			"cuisine":req.body.Cuisine,
 			
 						      });
 		};
