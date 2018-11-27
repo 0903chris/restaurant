@@ -76,8 +76,8 @@ app.post('/create',function(req,res) {
 			"name":req.body.name,
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
-			"photo":"no.jpg",
-			"photo mimetype":"asdah",
+			"photo":req.body.photo,
+			"photo mimetype":req.body.photomimetype,
 			"address":{
 			"street":req.body.street,
 			"building":req.body.building,
