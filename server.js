@@ -60,7 +60,7 @@ app.get('/logout',function(req,res) {
 });
 app.listen(process.env.PORT || 8099);
 var restaurant = function(db, callback) {
-   db.collection('books').insertOne( {
+   db.collection('restaurant').insertOne( {
 	"_id" : "Introduction to Node.js",
 	"name" : "John Dole",   
    }, function(err, result) {
