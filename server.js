@@ -78,10 +78,7 @@ app.post('/create',function(req,res) {
 			"cuisine":req.body.cuisine,
 			"photo":req.body."no.jpg",
 			"photo mimetype":"asdah",
-			"grade":{
-			"user":null,
-			"score":null
-			},
+			
 			"owner":req.body.owner
 			
 						      });
