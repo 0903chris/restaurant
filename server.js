@@ -75,7 +75,7 @@ app.post('/create',function(req,res) {
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
 			"cuisine":req.body.cuisine,
-			"photo":req.body."no.jpg",
+			"photo":"no.jpg",
 			"photo mimetype":"asdah"
 			
 			
