@@ -10,7 +10,7 @@ var SECRETKEY1 = 'I want to pass COMPS381F';
 var SECRETKEY2 = 'Keep this to yourself';
 
 var users = new Array(
-	{name: 'developer', password: 'developer'},
+	{name: 'demo', password: ''},
 	{name: 'guest', password: 'guest'}
 );
 
