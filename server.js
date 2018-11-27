@@ -76,14 +76,7 @@ app.post('/create',function(req,res) {
 			"name":req.body.name,
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
-			"photo":"no.jpg",
-			"photo mimetype":"asdah",
 			
-			"grade":{
-			"user":null,
-			"score":null
-			},
-			"owner":req.body.owner
 						      });
 		};
 res.redirect('/');
