@@ -73,7 +73,19 @@ app.post('/create',function(req,res) {
 	MongoClient.connect(url,function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
-			"name":req.body.name
+			"name":req.body.name,
+			"borough":req.body.borough,
+			"cuisine":req.body.cuisine,
+			"photo":req.body."no.jpg",
+			"photo mimetype":"asdah",
+			"address":{
+			"street":req.body.street,
+			"building":req.body.building,
+			"zipcode":req.body.zipcode,
+			"longtitude":req.body.gps1,
+			"latitude":req.body.gps2,
+			
+			}
 			
 						      });
 		});
