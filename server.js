@@ -94,7 +94,7 @@ app.post('/create',function(req,res) {
 			},
 			"owner":req.body.owner
 						      });
-		});
+		};
 res.redirect('/');
 });
 app.listen(process.env.PORT || 8099);
