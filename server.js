@@ -73,13 +73,11 @@ app.post('/create',function(req,res) {
 	MongoClient.connect(url,function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
-			"name":req.body.Name,
-			"borough":req.body.Borough,
-			"cuisine":req.body.Cuisine,
+			"Name":req.body.name
 			
 						      });
-		};
+		});
 res.redirect('/');
-};
+});
 
 app.listen(process.env.PORT || 8099);
