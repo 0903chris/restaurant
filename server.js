@@ -74,7 +74,6 @@ app.post('/create',function(req,res) {
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
-			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
 			"photo":req.body."no.jpg",
 			"photo mimetype":"asdah"
