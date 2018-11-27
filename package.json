@@ -7,9 +7,9 @@
         "express": "*",
         "ejs": "*",
         "body-parser": "*",
-        "cookie-session": "*"
+        "cookie-session": "*",
         "mongodb": "2.2.36",
-		"formidable": "latest"
+	"formidable": "latest"
     },
     "engine": "node >= 0.10.0",
     "scripts": {
