@@ -74,10 +74,7 @@ app.post('/create',function(req,res) {
 		assert.equal(err,null);
 		db.collection('restaurant').insertMany({
 			"name":req.body.name,
-			"cuisine":req.body.cuisine,
-			"photo":req.body."no.jpg",
-			"photo mimetype":"asdah"
-			
+			"cuisine":req.body.cuisine
 			
 			
 						      });
