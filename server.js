@@ -61,7 +61,7 @@ app.get('/logout',function(req,res) {
 app.listen(process.env.PORT || 8099);
 var restaurant = function(db, callback) {
    db.collection('restaurant').insertOne( {
-	"_id" : "Introduction to Node.js",
+	"_id" : "1",
 	"name" : "John Dole",   
    }, function(err, result) {
     assert.equal(err, null);
