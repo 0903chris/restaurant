@@ -8,6 +8,8 @@
         "ejs": "*",
         "body-parser": "*",
         "cookie-session": "*"
+        "mongodb": "2.2.36",
+		"formidable": "latest"
     },
     "engine": "node >= 0.10.0",
     "scripts": {
