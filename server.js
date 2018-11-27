@@ -34,7 +34,7 @@ app.get('/',function(req,res) {
 		res.redirect('/login');
 	} else {
 		res.status(200);
-		res.render('secrets',{name:req.session.username});
+		res.render('restaurant',{name:req.session.username});
 	}
 });
 
