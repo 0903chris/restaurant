@@ -83,7 +83,7 @@ app.post('/create',function(req,res) {
 			"address.building":req.body.building,
 			"address.zipcode":req.body.zipcode,
 			"address.longtitude":req.body.gps1,
-			"address.atitude":req.body.gps2,
+			"address.latitude":req.body.gps2,
 			"grade":{
 			"user":null,
 			"score":null
