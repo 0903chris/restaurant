@@ -72,8 +72,8 @@ app.get('/logout',function(req,res) {
 app.post('/create',function(req,res) {
 	MongoClient.connect(url,function(err,db){
 		assert.equal(err,null);
-		db.collection('restaurant').insertMany({
-			"name":req.body.name,
+		db.collection('restaurant').insertOne({
+			
 			"cuisine":req.body.cuisine
 			
 			
