@@ -74,9 +74,23 @@ app.post('/create',function(req,res) {
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
+			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
 			"photo":"no.jpg",
-			"photo mimetype":"asdah"
+			"photo mimetype":"asdah",
+			"address":{
+			"street":req.body.street,
+			"building":req.body.building,
+			"zipcode":req.body.zipcode,
+			"longtitude":req.body.gps1,
+			"latitude":req.body.gps2,
+			},
+			"grade":{
+			"user":null,
+			"score":null
+			},
+			"owner":req.body.owner
+			
 			
 			
 						      });
