@@ -70,7 +70,7 @@ app.get('/create',function(req,res) {
 });
 
 app.get('/login',function(req,res) {
-	res.sendFile(__dirname + '/login.html');
+	res.sendFile(__dirname + '/public/login.html');
 });
 
 app.post('/login',function(req,res) {
