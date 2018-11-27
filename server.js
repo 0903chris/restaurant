@@ -8,6 +8,13 @@ var url = 'mongodb://<dbuser>:<dbpassword>@ds149672.mlab.com:49672/chrison9';
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 
+MongoClient.connect(url, function(err, db) {
+  assert.equal(null, err);
+  restaurant(db, function() {
+      db.close();
+  });
+});
+
 app = express();
 app.set('view engine','ejs');
 
@@ -70,9 +77,3 @@ var restaurant = function(db, callback) {
   });
 };  
 
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  restaurant(db, function() {
-      db.close();
-  });
-});
