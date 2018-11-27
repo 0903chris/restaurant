@@ -70,7 +70,7 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 app.post('/create',function(req,res) {
-	MongoCLient.connect(url,function(err,db){
+	MongoClient.connect(url,function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
