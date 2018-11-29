@@ -9,11 +9,6 @@ var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
 var assert= require('assert');
 var ObjectId=require('mongodb').ObjectID;
 var formidable = require('formidable');
-var form = new formidable.IncomingForm();
-var filename = files.filetoupload.path;
-      var title = (fields.title.length > 0) ? fields.title : "untitled";
-      var mimetype = files.filetoupload.type;
-
  
 app = express();
 app.set('view engine','ejs');
@@ -25,64 +20,7 @@ var users = new Array(
 	{name: 'demo', password: ''},
 	{name: 'guest', password: 'guest'}
 );
-var server = http.createServer(function (req, res) {
-  var parsedURL = url.parse(req.url,true);
-  app.get('/fileupload', function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
- else{
 
-    form.parse(req, function (err, fields, files) {
-      console.log(JSON.stringify(files));
-      if (files.filetoupload.size == 0) {
-        res.writeHead(500,{"Content-Type":"text/plain"});
-        res.end("No file uploaded!");  
-      }
-      
-      console.log("title = " + title);
-      console.log("filename = " + filename);
-      fs.readFile(filename, function(err,data) {
-        MongoClient.connect(mongourl,function(err,db) {
-          try {
-            assert.equal(err,null);
-          } catch (err) {
-            res.writeHead(500,{"Content-Type":"text/plain"});
-            res.end("MongoClient connect() failed!");
-            return(-1);
-          }
-          var new_r = {};
-          new_r['title'] = title;
-          new_r['mimetype'] = mimetype;
-          new_r['image'] = new Buffer(data).toString('base64');
-          insertPhoto(db,new_r,function(result) {
-            db.close();
-            res.writeHead(200, {"Content-Type": "text/plain"});
-            res.end('Photo was inserted into MongoDB!');
-          })
-        });
-      })
-    });
-  } else {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
-    res.write('Title: <input type="text" name="title" minlength=1><br>');
-    res.write('<input type="file" name="filetoupload"><br>');
-    res.write('<input type="submit">');
-    res.write('</form>');
-    res.end();
-  }
-});
-
-function insertPhoto(db,r,callback) {
-  db.collection('photo').insertOne(r,function(err,result) {
-    assert.equal(err,null);
-    console.log("insert was successful!");
-    console.log(JSON.stringify(result));
-    callback(result);
-  });
-}
 
 app.set('view engine','ejs');
 
