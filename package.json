@@ -4,12 +4,13 @@
     "author": "test",
     "version": "0.0.1",
     "dependencies": {
-        "express": "*",
         "ejs": "*",
         "body-parser": "*",
         "cookie-session": "*",
         "mongodb": "^2.2.31",
-        "formidable": "latest"
+        "formidable": "latest",
+         "express": "latest",
+    "express-fileupload": "latest"
     },
     "engine": "node >= 6.0.0",
     "scripts": {
