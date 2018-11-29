@@ -140,5 +140,60 @@ app.get('/showdetails', function(req,res) {
 		});
 	}
 });
+app.get('/edit',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		var item = null;
+		if (req.query.id) {
+		for (i in items) {
+			if (items[i]._id == req.query.id) {
+				item = items[i]
+				break;
+			}
+		}
+		if (item) {
+			res.render('update', {r: items[i]});							
+		} else {
+			res.status(500).end(req.query.id + ' not found!');
+		}
+	} else {
+		res.status(500).end('id missing!');
+	}
+			});
+		});
+	}
+});
 
+app.post('/update',function(req,res) {
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+			db.collection('restaurant').update({"_id": req.body.id}, { $set:  {
+			    "name": req.body.name,
+			    "borough": req.body.borough,
+			    "cuisine": req.body.cuisine,
+			    "photo": "no.jpg",
+			    "photo mimetype": "KASDKJ",
+			    "street": req.body.street,
+			    "building": req.body.building,
+			    "zipcode": req.body.zipcode,
+			    "gps1": req.body.gps1,
+			    "gps2": req.body.gps2,
+			    "grades": {
+				"user": null,
+				"score": null
+			    },
+			    "owner":req.session.username
+			}
+		});
+	
+		});
+		
+	res.redirect('/');
+});
 app.listen(process.env.PORT || 8099);
