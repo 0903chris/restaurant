@@ -24,14 +24,12 @@
       var map;
       
       function initMap() {
-        var latitude =<%= r.latitude %>;
-        var longtitude =<%= r.longtitude %>;
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: parseFloat(latitude), lng: parseFloat(longtitude)},
+          center: {lat: parseFloat(<%= r.latitude %>), lng: parseFloat(<%= r.longtitude %>)},
           zoom: 20
         });
         var marker =new google.maps.Marker({
-        position:{lat: parseFloat(latitude), lng: parseFloat(longtitude)},
+        position:{lat: parseFloat(<%= r.latitude %>), lng: parseFloat(<%= r.longtitude %>)},
         map:map
         });
       }
