@@ -34,25 +34,23 @@
   }
 </style>
 
-   <body>
-    <div class="jumbotron text-center container=fluid">
+  <body>
+   <div class="jumbotron text-center container=fluid">
       <H1>Restaurants</H1>
       <p>User: <%= name %></p>
+      <p>Showing <%= r.length %> documents</p>
       </div>
       <div class="container-fluid">
     <div class="row">
       <a href="/create">
         <button class="btn btn-default">Create New Restaurant</button>
       </a>
-    
-      <ol>
+    </div>
+    <ol>
   <% r.forEach(function(rest) { %>
   <li><a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a></li>
   <% });                        %>
 </ol>
-    </div>
-  
    </body>
-    </div>
-   </body>
+   
 </html>
