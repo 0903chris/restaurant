@@ -24,13 +24,13 @@
       var map;
       
       function initMap() {
-      var pos = {lat: 35.693505, lng: 139.701629};
+      
         map = new google.maps.Map(document.getElementById('map'), {
-          center: pos,
+          center: {lat: 35.693505, lng: 139.701629},
           zoom: 20
         });
         var marker =new google.maps.Marker({
-        position:pos,
+        position:{lat: 35.693505, lng: 139.701629},
         map:map
         });
       }
