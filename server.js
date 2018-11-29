@@ -1,10 +1,11 @@
 
 var express = require('express');
 var session = require('cookie-session');
+var url  = require('url');
 var bodyParser = require('body-parser');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
-var url ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
+var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
 var assert= require('assert');
 var ObjectId=require('mongodb').ObjectID;
 
@@ -45,7 +46,7 @@ app.get('/read',function(req,res) {
 		res.redirect('/login');
 	} 
 	else {
-		MongoClient.connect(url, function(err, db) {
+		MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		res.render('restaurant',{name:req.session.username, r:items});
@@ -84,7 +85,7 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 app.post('/create',function(req,res) {
-	MongoClient.connect(url,function(err,db){
+	MongoClient.connect(mongourl,function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
@@ -117,7 +118,7 @@ app.get('/showdetails', function(req,res) {
 		res.redirect('/login');
 	} 
 	else {
-		MongoClient.connect(url, function(err, db) {
+		MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		var item = null;
