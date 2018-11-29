@@ -45,8 +45,14 @@
     Zipcode: <input type="text" name="zipcode"><br>
     GPS Coordinates (lon.): <input type="text" name="gps1"><br>
     GPS Coordinates (lat.) <input type="text" name="gps2"><br>
-    Photo:<input name="photo" class="w3-input" type="file"><br>
-    Photo Mimetype:<input type="text" name="photomimetype"  ><br>
+          <form ref='uploadForm'
+            id='uploadForm'
+            action='/upload'
+            method='post'
+            encType="multipart/form-data">
+                <input type="file" name="sampleFile" />
+                <input type='submit' value='Upload' />
+        </form>
     User:<input type="text" name="user"  ><br>
     Score:<input type="integer" name="score"  ><br>
     Owner:<input  type="text" name="owner" ><br>
