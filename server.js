@@ -23,136 +23,101 @@ var users = new Array(
 
 
 
-var server = http.createServer(function (req, res) {
-  var parsedURL = url.parse(req.url,true);
-  var queryAsObject = parsedURL.query;
-  
-  if (parsedURL.pathname == '/fileupload' && 
-      req.method.toLowerCase() == "post") {
-    // parse a file upload
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      console.log(JSON.stringify(files));
-      if (files.filetoupload.size == 0) {
-        res.writeHead(500,{"Content-Type":"text/plain"});
-        res.end("No file uploaded!");  
-      }
-      var filename = files.filetoupload.path;
-      if (fields.title) {
-        var title = (fields.title.length > 0) ? fields.title : "untitled";
-      }
-      if (files.filetoupload.type) {
-        var mimetype = files.filetoupload.type;
-      }
-      console.log("title = " + title);
-      console.log("filename = " + filename);
-      fs.readFile(filename, function(err,data) {
-        MongoClient.connect(mongourl,function(err,db) {
-          try {
-            assert.equal(err,null);
-          } catch (err) {
-            res.writeHead(500,{"Content-Type":"text/plain"});
-            res.end("MongoClient connect() failed!");
-            return(-1);
-          }
-          var new_r = {};
-          new_r['title'] = title;
-          new_r['mimetype'] = mimetype;
-          new_r['image'] = new Buffer(data).toString('base64');
-          insertPhoto(db,new_r,function(result) {
-            db.close();
-            res.writeHead(200, {"Content-Type": "text/plain"});
-            res.end('Photo was inserted into MongoDB!');
-          })
-        });
-      })
-    });
-  } else if (parsedURL.pathname == '/photos') {
-    MongoClient.connect(mongourl, function(err,db) {
-      try {
-        assert.equal(err,null);
-      } catch (err) {
-        res.writeHead(500,{"Content-Type":"text/plain"});
-        res.end("MongoClient connect() failed!");
-        return(-1);
-      }      
-      console.log('Connected to MongoDB');
-      findPhoto(db,{},function(photos) {
+var express = require('express');
+var fileUpload = require('express-fileupload');
+
+// middlewares
+app.use(fileUpload());   // add 'files' object to req
+
+app.post('/upload', function(req, res) {
+    var sampleFile;
+
+    if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
+    }
+
+    MongoClient.connect(mongourl,function(err,db) {
+      console.log('Connected to mlab.com');
+      assert.equal(null,err);
+      create(db, req.files.sampleFile, function(result) {
         db.close();
-        console.log('Disconnected MongoDB');
-        res.writeHead(200, {"Content-Type": "text/html"});			
-				res.write('<html><head><title>Photos</title></head>');
-				res.write('<body><H1>Photos</H1>');
-				res.write('<H2>Showing '+photos.length+' document(s)</H2>');
-				res.write('<ol>');
-				for (var i in photos) {
-          res.write('<li><a href=/display?_id='+
-          photos[i]._id+'>'+photos[i].title+'</a></li>');
-				}
-				res.write('</ol>');
-				res.end('</body></html>');
-      })
-    });
-  } else if (parsedURL.pathname == '/display') {
-    MongoClient.connect(mongourl, function(err,db) {
-      try {
-        assert.equal(err,null);
-      } catch (err) {
-        res.writeHead(500,{"Content-Type":"text/plain"});
-        res.end("MongoClient connect() failed!");
-        return(-1);
-      }
-      console.log('Connected to MongoDB');
-      var criteria = {};
-      criteria['_id'] = ObjectID(queryAsObject._id);
-      findPhoto(db,criteria,function(photo) {
-        db.close();
-        console.log('Disconnected MongoDB');
-        console.log('Photo returned = ' + photo.length);
-        var image = new Buffer(photo[0].image,'base64');        
-        var contentType = {};
-        contentType['Content-Type'] = photo[0].mimetype;
-        console.log(contentType['Content-Type']);
-        if (contentType['Content-Type'] == "image/jpeg") {
-          console.log('Preparing to send ' + JSON.stringify(contentType));
-          res.writeHead(200, contentType);
-          res.end(image);
+        if (result.insertedId != null) {
+          res.status(200);
+          res.end('Inserted: ' + result.insertedId)
         } else {
-          res.writeHead(500,{"Content-Type":"text/plain"});
-          res.end("Not JPEG format!!!");  
+          res.status(500);
+          res.end(JSON.stringify(result));
         }
       });
     });
-  } else {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
-    res.write('Title: <input type="text" name="title" minlength=1><br>');
-    res.write('<input type="file" name="filetoupload"><br>');
-    res.write('<input type="submit">');
-    res.write('</form>');
-    res.end();
-  }
+    /*
+    sampleFile = req.files.sampleFile;
+    sampleFile.mv(__dirname + '/somewhere/on/your/server/filename.jpg', function(err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else {
+            res.send('File uploaded!');
+        }
+    });
+    */
 });
 
-function insertPhoto(db,r,callback) {
-  db.collection('restaurant').insertOne(r,function(err,result) {
-    assert.equal(err,null);
-    console.log("insert was successful!");
-    console.log(JSON.stringify(result));
+app.get('/download', function(req,res) {
+  MongoClient.connect(mongourl,function(err,db) {
+    console.log('Connected to mlab.com');
+    console.log('Finding key = ' + req.query.key)
+    assert.equal(null,err);
+    var bfile;
+    var key = req.query.key;
+	  if (key != null) {
+      read(db, key, function(bfile,mimetype) {
+        if (bfile != null) {
+          console.log('Found: ' + key)
+          res.set('Content-Type',mimetype);
+          res.end(bfile);
+        } else {
+          res.status(404);
+          res.end(key + ' not found!');
+          console.log(key + ' not found!');
+        }
+        db.close();
+      });
+    } else {
+      res.status(500);
+      res.end('Error: query parameter "key" is missing!');
+    }
+  });
+});
+
+function create(db,bfile,callback) {
+  console.log(bfile);
+  db.collection('restaurant').insertOne({
+    "photo" : new Buffer(bfile.data).toString('base64'),
+    "photo mimetype" : bfile.mimetype,
+  }, function(err,result) {
+    //assert.equal(err,null);
+    if (err) {
+      console.log('insertOne Error: ' + JSON.stringify(err));
+      result = err;
+    } else {
+      console.log("Inserted _id = " + result.insertId);
+    }
     callback(result);
   });
 }
 
-function findPhoto(db,criteria,callback) {
-  var cursor = db.collection("restaurant").find(criteria);
-  var photos = [];
-  cursor.each(function(err,doc) {
+function read(db,target,callback) {
+  var bfile = null;
+  var mimetype = null;
+  db.collection('restaurant').findOne({"_id": ObjectId(target)}, function(err,doc) {
     assert.equal(err,null);
     if (doc != null) {
-      photos.push(doc);
-    } else {
-      callback(photos);
+      bfile = new Buffer(doc.data,'base64');
+      mimetype = doc.mimetype;
     }
+    callback(bfile,mimetype);
   });
 }
 
