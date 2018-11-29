@@ -30,24 +30,56 @@ var server = http.createServer(function (req, res) {
     // parse a file upload
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
+      console.log(JSON.stringify(files));
+      if (files.filetoupload.size == 0) {
+        res.writeHead(500,{"Content-Type":"text/plain"});
+        res.end("No file uploaded!");  
+      }
       var filename = files.filetoupload.path;
+      var title = (fields.title.length > 0) ? fields.title : "untitled";
+      var mimetype = files.filetoupload.type;
+      console.log("title = " + title);
       console.log("filename = " + filename);
       fs.readFile(filename, function(err,data) {
-         var base64 = new Buffer(data).toString('base64');
-         res.writeHead(200,{"Content-Type": "text/plain"});
-         res.write('File uploaded: (Base64)\n');         
-         res.end(base64);
+        MongoClient.connect(mongourl,function(err,db) {
+          try {
+            assert.equal(err,null);
+          } catch (err) {
+            res.writeHead(500,{"Content-Type":"text/plain"});
+            res.end("MongoClient connect() failed!");
+            return(-1);
+          }
+          var new_r = {};
+          new_r['title'] = title;
+          new_r['mimetype'] = mimetype;
+          new_r['image'] = new Buffer(data).toString('base64');
+          insertPhoto(db,new_r,function(result) {
+            db.close();
+            res.writeHead(200, {"Content-Type": "text/plain"});
+            res.end('Photo was inserted into MongoDB!');
+          })
+        });
       })
     });
   } else {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.write('<form action="fileupload" method="post" enctype="multipart/form-data">');
+    res.write('Title: <input type="text" name="title" minlength=1><br>');
     res.write('<input type="file" name="filetoupload"><br>');
     res.write('<input type="submit">');
     res.write('</form>');
     res.end();
   }
 });
+
+function insertPhoto(db,r,callback) {
+  db.collection('photo').insertOne(r,function(err,result) {
+    assert.equal(err,null);
+    console.log("insert was successful!");
+    console.log(JSON.stringify(result));
+    callback(result);
+  });
+}
 
 app.set('view engine','ejs');
 
@@ -145,11 +177,13 @@ app.post('/create',function(req,res) {
 			"cuisine":req.body.cuisine,
 			"photo":req.body.photo,
 			"photo mimetype":req.body.photomimetype,
+			"address":{
 			"street":req.body.street,
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
 			"longtitude":req.body.gps1,
-			"latitude":req.body.gps2,
+			"latitude":req.body.gps2
+			},
 			"grade":{
 			"user":req.session.username,
 			"score":req.body.score
