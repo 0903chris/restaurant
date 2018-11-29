@@ -1,4 +1,4 @@
-
+var http = require('http');
 var express = require('express');
 var session = require('cookie-session');
 var url  = require('url');
@@ -36,8 +36,7 @@ app.get('/',function(req,res) {
 	if (!req.session.authenticated) {
 		res.redirect('/login');
 	} else {
-		res.status(200);
-		res.render('restaurant',{name:req.session.username});
+		res.redirect('/read');;
 	}
 });
 app.get('/read',function(req,res) {
@@ -85,7 +84,7 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 app.post('/create',function(req,res) {
-	MongoClient.connect(mongourl,function(err,db){
+	MongoClient.connect(mongourl, function(err,db){
 		assert.equal(err,null);
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
@@ -131,6 +130,35 @@ app.get('/showdetails', function(req,res) {
 		}
 		if (item) {
 			res.render('details', {r: items[i]});							
+		} else {
+			res.status(500).end(req.query.id + ' not found!');
+		}
+	} else {
+		res.status(500).end('id missing!');
+	}
+			});
+		});
+	}
+});
+app.get('/edit',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		var item = null;
+		if (req.query.id) {
+		for (i in items) {
+			if (items[i]._id == req.query.id) {
+				item = items[i]
+				break;
+			}
+		}
+		if (item) {
+			res.render('update', {r: items[i]});							
 		} else {
 			res.status(500).end(req.query.id + ' not found!');
 		}
