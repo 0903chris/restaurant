@@ -63,7 +63,15 @@ app.get('/create',function(req,res) {
 		res.render('create',{name:req.session.username});
 	}
 });
-
+app.get('/gps',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} else {
+		res.status(200);
+		res.render('gps',{name:req.session.username});
+	}
+});
 app.get('/login',function(req,res) {
 	res.sendFile(__dirname + '/public/login.html');
 });
