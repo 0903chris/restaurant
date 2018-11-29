@@ -22,7 +22,7 @@ var users = new Array(
 );
 
 
-app.set('view engine','ejs');
+
 
 var express = require('express');
 var fileUpload = require('express-fileupload');
