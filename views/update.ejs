@@ -1,0 +1,55 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Restaurant</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style type="text/css">
+  .well {
+      background: none;
+      height: 320px;
+  }
+  .table-scroll tbody {
+      position: absolute;
+      overflow-y: scroll;
+      height: 250px;
+  }
+  .table-scroll tr {
+      width: 100%;
+      table-layout: fixed;
+      display: inline-table;
+  }
+  .table-scroll thead > tr > th {
+      border: none;
+  }
+</style>
+
+   <body>
+   
+  <form action="/update" method="post">
+  <input type="hidden" name="id" value=<%= r._id %>>
+    Name: <input type="text" name="name" value=<%= r.name %>><br>
+    borough: <input type="text" name="borough" value=<%= r.borough %>><br>
+    cuisine: <input type="text" name="cuisine" value=<%= r.cuisine %>><br>
+    street: <input type="text" name="street"value=<%= r.street %>><br>
+    building: <input type="text" name="building"value=<%= r.building %>><br>
+    zipcode: <input type="text" name="zipcode"value=<%= r.zipcode %>><br>
+    GPS Coordinates (lon.): <input type="text" name="gps1"value=<%= r.gps1 %>><br>
+    GPS Coordinates (lat.) <input type="text" name="gps2"value=<%= r.gps2 %>><br>
+    Photo:<input name="sampleFile" class="w3-input" type="file"><br>
+    
+	<input type="submit" value="update">
+  
+	</form>
+   </body>
+</html>
