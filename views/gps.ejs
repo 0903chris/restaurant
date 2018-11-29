@@ -27,11 +27,11 @@
         var latitude =<%= r.latitude %>;
         var longtitude =<%= r.longtitude %>;
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: latitude, lng: longtitude},
+          center: {lat: parseFloat(latitude), lng: parseFloat(longtitude)},
           zoom: 20
         });
         var marker =new google.maps.Marker({
-        position:{lat: latitude, lng: longtitude},
+        position:{lat: parseFloat(latitude), lng: parseFloat(longtitude)},
         map:map
         });
       }
