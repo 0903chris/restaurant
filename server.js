@@ -29,7 +29,7 @@ var fileUpload = require('express-fileupload');
 // middlewares
 app.use(fileUpload());   // add 'files' object to req
 
-app.post('/upload', function(req, res) {
+app.post('/create', function(req, res) {
     var sampleFile;
 
     if (!req.files) {
