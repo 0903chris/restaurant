@@ -9,7 +9,7 @@
         "cookie-session": "*",
         "mongodb": "^2.2.31",
         "formidable": "latest",
-         "express": "*",
+         "express": "*"
   
     },
     "engine": "node >= 6.0.0",
