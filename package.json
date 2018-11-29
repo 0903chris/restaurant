@@ -9,6 +9,7 @@
         "body-parser": "*",
         "cookie-session": "*",
         "mongodb": "^2.2.31"
+        "formidable": "latest"
     },
     "engine": "node >= 6.0.0",
     "scripts": {
