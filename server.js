@@ -10,6 +10,18 @@ var assert= require('assert');
 var ObjectId=require('mongodb').ObjectID;
 var formidable = require('formidable');
 
+
+ 
+app = express();
+app.set('view engine','ejs');
+
+var SECRETKEY1 = 'I want to pass COMPS381F';
+var SECRETKEY2 = 'Keep this to yourself';
+
+var users = new Array(
+	{name: 'demo', password: ''},
+	{name: 'guest', password: 'guest'}
+);
 var server = http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url,true);
   
@@ -36,19 +48,9 @@ var server = http.createServer(function (req, res) {
     res.end();
   }
 });
- 
-app = express();
-app.set('view engine','ejs');
-
-var SECRETKEY1 = 'I want to pass COMPS381F';
-var SECRETKEY2 = 'Keep this to yourself';
-
-var users = new Array(
-	{name: 'demo', password: ''},
-	{name: 'guest', password: 'guest'}
-);
 
 app.set('view engine','ejs');
+
 
 app.use(session({
   name: 'session',
