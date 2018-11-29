@@ -39,6 +39,20 @@ app.get('/',function(req,res) {
 		res.render('restaurant',{name:req.session.username});
 	}
 });
+app.get('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		res.render('restaurant',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
 
 app.get('/create',function(req,res) {
 	console.log(req.session);
