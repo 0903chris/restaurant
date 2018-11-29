@@ -9,7 +9,10 @@ var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
 var assert= require('assert');
 var ObjectId=require('mongodb').ObjectID;
 var formidable = require('formidable');
-
+var form = new formidable.IncomingForm();
+var filename = files.filetoupload.path;
+      var title = (fields.title.length > 0) ? fields.title : "untitled";
+      var mimetype = files.filetoupload.type;
 
  
 app = express();
@@ -24,20 +27,20 @@ var users = new Array(
 );
 var server = http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url,true);
-  
-  if (parsedURL.pathname == '/fileupload' && 
-      req.method.toLowerCase() == "post") {
-    // parse a file upload
-    var form = new formidable.IncomingForm();
+  app.get('/fileupload', function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+ else{
+
     form.parse(req, function (err, fields, files) {
       console.log(JSON.stringify(files));
       if (files.filetoupload.size == 0) {
         res.writeHead(500,{"Content-Type":"text/plain"});
         res.end("No file uploaded!");  
       }
-      var filename = files.filetoupload.path;
-      var title = (fields.title.length > 0) ? fields.title : "untitled";
-      var mimetype = files.filetoupload.type;
+      
       console.log("title = " + title);
       console.log("filename = " + filename);
       fs.readFile(filename, function(err,data) {
