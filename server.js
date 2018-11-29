@@ -45,7 +45,7 @@ app.get('/read',function(req,res) {
 		res.redirect('/login');
 	} 
 	else {
-		MongoClient.connect(mongourl, function(err, db) {
+		MongoClient.connect(url, function(err, db) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		res.render('restaurant',{name:req.session.username, r:items});
@@ -117,7 +117,7 @@ app.get('/showdetails', function(req,res) {
 		res.redirect('/login');
 	} 
 	else {
-		MongoClient.connect(mongourl, function(err, db) {
+		MongoClient.connect(url, function(err, db) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		var item = null;
