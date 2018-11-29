@@ -56,12 +56,13 @@
    
   
 	</form>
-	<input type="submit" value="create">
-          <form ref='uploadForm'
+	<form ref='uploadForm'
             id='uploadForm'
             action='/upload'
+            method='post'
+            encType="multipart/form-data">
                 <input type="file" name="sampleFile" />
-                <input type='submit' value='Upload' />
-	</form>
+                <input type='submit' value='Upload!' />
+        </form>		
    </body>
 </html>
