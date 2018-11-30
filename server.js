@@ -55,17 +55,18 @@ app.post('/upload', function(req, res) {
 
 function create(db,bfile,rrr,callback) {
   console.log(bfile);
-  db.collection('photo').insertOne({
-    "photo" : new Buffer(bfile.data).toString('base64'),
-    "photo mimetype" : bfile.mimetype,
-	 "name":rrr.name,
+  db.collection('restaurant').insertOne({
+	"name":rrr.name,
 	"borough": rrr.borough,
 	"cuisine": rrr.cuisine,
-	  "street":rrr.street,
+	"street":rrr.street,
 	"building":rrr.building,
 	"zipcode":rrr.zipcode,
 	"longtitude":rrr.gps1,
 	"latitude":rrr.gps2
+	"photo" : new Buffer(bfile.data).toString('base64'),
+	"photo mimetype" : bfile.mimetype,
+
 	  
 	  
   }, function(err,result) {
