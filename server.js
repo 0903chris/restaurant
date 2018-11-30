@@ -169,7 +169,7 @@ app.post('/create',function(req,res) {
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
  			"photo" : new Buffer(req.sampleFile.data).toString('base64'),
-    			"photo mimetype" : req.sampleFile.mimetype
+    			"photo mimetype" : req.sampleFile.mimetype,
 			"street":req.body.street,
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
