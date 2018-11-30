@@ -51,45 +51,8 @@ app.post('/upload', function(req, res) {
         }
       });
     });
-    /*
-    sampleFile = req.files.sampleFile;
-    sampleFile.mv(__dirname + '/somewhere/on/your/server/filename.jpg', function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-        else {
-            res.send('File uploaded!');
-        }
-    });
-    */
 });
 
-app.get('/download', function(req,res) {
-  MongoClient.connect(mongourl,function(err,db) {
-    console.log('Connected to mlab.com');
-    console.log('Finding key = ' + req.query.key)
-    assert.equal(null,err);
-    var bfile;
-    var key = req.query.key;
-	  if (key != null) {
-      read(db, key, function(bfile,mimetype) {
-        if (bfile != null) {
-          console.log('Found: ' + key)
-          res.set('Content-Type',mimetype);
-          res.end(bfile);
-        } else {
-          res.status(404);
-          res.end(key + ' not found!');
-          console.log(key + ' not found!');
-        }
-        db.close();
-      });
-    } else {
-      res.status(500);
-      res.end('Error: query parameter "key" is missing!');
-    }
-  });
-});
 
 function create(db,bfile,callback) {
   console.log(bfile);
