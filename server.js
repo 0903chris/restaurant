@@ -168,6 +168,7 @@ app.post('/create',function(req,res) {
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
 
+			"photomimetype" : req.files.sampleFile.mimetype,
 			"street":req.body.street,
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
