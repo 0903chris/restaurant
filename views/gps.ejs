@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>Google Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <style>
@@ -24,9 +24,12 @@
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
+          center: {lat: 35.693505, lng: 139.701629},
+          zoom: 20
         });
+        var marker =new google.maps.Marker({
+        position:{lat: 35.693505, lng: 139.701629},
+        map:map
       }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFPW9SpSx65ABEgXCt-YhYEBg4U02BBqo&callback=initMap"
