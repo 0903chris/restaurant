@@ -63,9 +63,9 @@ function create(db,bfile,rrr,callback) {
 	"building":rrr.building,
 	"zipcode":rrr.zipcode,
 	"longtitude":rrr.gps1,
-	"latitude":rrr.gps2
+	"latitude":rrr.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
-	"photo mimetype" : bfile.mimetype,
+	"photo mimetype" : bfile.mimetype
 
 	  
 	  
