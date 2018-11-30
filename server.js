@@ -31,11 +31,6 @@ app.use(fileUpload());
 app.post('/upload', function(req, res) {
     var sampleFile;
 
-    if (!req.files) {
-        res.send('No files were uploaded.');
-        return;
-    }
-
     MongoClient.connect(mongourl,function(err,db) {
       console.log('Connected to mlab.com');
       assert.equal(null,err);
