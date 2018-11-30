@@ -58,14 +58,6 @@ function create(db,bfile,callback) {
   db.collection('photo').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
     "photo mimetype" : bfile.mimetype,
-	"name":req.body.name,
-			"borough":req.body.borough,
-			"cuisine":req.body.cuisine,
-			"street":req.body.street,
-			"building":req.body.building,
-			"zipcode":req.body.zipcode,
-			"longtitude":req.body.gps1,
-			"latitude":req.body.gps2	
 			
   }, function(err,result) {
     if (err) {
