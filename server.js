@@ -53,7 +53,7 @@ app.post('/upload', function(req, res) {
 });
 
 
-function create(db,bfile,reqname.callback) {
+function create(db,bfile,reqname,callback) {
   console.log(bfile);
   db.collection('restaurant').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
