@@ -36,7 +36,7 @@
 
    <body>
    
-  <form action="/create" method="post">
+  <form action="/upload" method="post">
     Name: <input type="text" name="name" required/><br>
     Borough: <input type="text" name="borough"><br>
     Cuisine: <input type="text" name="cuisine"><br>
@@ -45,15 +45,6 @@
     Zipcode: <input type="text" name="zipcode"><br>
     GPS Coordinates (lon.): <input type="text" name="gps1"><br>
     GPS Coordinates (lat.) <input type="text" name="gps2"><br>
-	<input type="submit" value="create">
-   
-  
-	</form>
-	<form ref='uploadForm'
-            id='uploadForm'
-            action='/upload'
-            method='post'
-            encType="multipart/form-data">
                 <input type="file" name="sampleFile">
                 <input type='submit' value='Upload!'>
         </form>	
