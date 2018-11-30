@@ -55,7 +55,7 @@ app.post('/upload', function(req, res) {
 
 function create(db,bfile,callback) {
   console.log(bfile);
-  db.collection('restaurant').insertOne({
+  db.collection('photo').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
     "photo mimetype" : bfile.mimetype,
 			
