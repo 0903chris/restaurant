@@ -43,7 +43,7 @@ app.post('/upload', function(req, res) {
         db.close();
         if (result.insertedId != null) {
           res.status(200);
-          res.end('Inserted: ' + result.insertedId)
+          res.redirect('/create')
         } else {
           res.status(500);
           res.end(JSON.stringify(result));
@@ -55,7 +55,7 @@ app.post('/upload', function(req, res) {
 
 function create(db,bfile,callback) {
   console.log(bfile);
-  db.collection('restaurant').insertOne({
+  db.collection('photo').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
     "photo mimetype" : bfile.mimetype,
   }, function(err,result) {
