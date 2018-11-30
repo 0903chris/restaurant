@@ -158,7 +158,7 @@ app.post('/create',function(req,res) {
 			},
 			"owner":req.body.owner
 						      });
-		});
+		
 	var sampleFile;
 
     if (!req.files) {
@@ -166,9 +166,6 @@ app.post('/create',function(req,res) {
         return;
     }
 
-    MongoClient.connect(mongourl,function(err,db) {
-      console.log('Connected to mlab.com');
-      assert.equal(null,err);
       create(db, req.files.sampleFile, function(result) {
         db.close();
         if (result.insertedId != null) {
