@@ -57,7 +57,7 @@ function create(db,bfile,callback) {
   console.log(bfile);
   db.collection('photo').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
-    "photo mimetype" : bfile.mimetype
+    "photo mimetype" : bfile.mimetype,
 "name":req.body.name
   }, function(err,result) {
     if (err) {
