@@ -25,7 +25,7 @@
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'),{
           center: {lat: <%= r.latitude %>, lng: <%= r.longtitude %>},
-          zoom: 15
+          zoom: 20
         });
         var marker =new google.maps.Marker({
         position:{lat: <%= r.latitude %>, lng: <%= r.longtitude %>},
