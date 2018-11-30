@@ -57,7 +57,7 @@ function create(db,bfile,callback) {
   console.log(bfile);
   db.collection('photo').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
-    "photo mimetype" : bfile.mimetype,
+    "photo mimetype" : bfile.mimetype
   }, function(err,result) {
     if (err) {
       console.log('insertOne Error: ' + JSON.stringify(err));
@@ -167,8 +167,8 @@ app.post('/create',function(req,res) {
 			"name":req.body.name,
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
-			"photo":req.body.photo,
-			"photomimetype":req.body.photomimetype,
+			"photo":new Buffer(req.files.sampleFile.data).toString('base64'),
+			"photomimetype":req.files.sampleFile.mimetype,
 			"street":req.body.street,
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
