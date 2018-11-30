@@ -69,7 +69,7 @@ function create(db,bfile,callback) {
 			"grade":{
 			"user":req.session.username,
 			"score":req.body.score
-			
+			}		
 			
   }, function(err,result) {
     if (err) {
