@@ -2,7 +2,7 @@
     "name": "server",
     "description": "NodeJS Session",
     "author": "test",
-    "version": "0.0.1",
+    "version": "0.0.1", 
     "dependencies": {
         "express": "*",
         "ejs": "*",
