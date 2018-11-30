@@ -218,7 +218,7 @@ app.post('/create',function(req,res) {
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
 			"photo":req.body.photo,
-			"photo mimetype":req.body.photomimetype,
+			"photomimetype":req.body.photomimetype,
 			"street":req.body.street,
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
