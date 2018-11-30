@@ -39,7 +39,7 @@ app.post('/upload', function(req, res) {
     MongoClient.connect(mongourl,function(err,db) {
       console.log('Connected to mlab.com');
       assert.equal(null,err);
-      create(db, req.files.sampleFile,req.body.name, function(result) {
+      create(db, req.files.sampleFile, function(result) {
         db.close();
         if (result.insertedId != null) {
           res.status(200);
@@ -53,12 +53,11 @@ app.post('/upload', function(req, res) {
 });
 
 
-function create(db,bfile,reqname,callback) {
+function create(db,bfile,callback) {
   console.log(bfile);
   db.collection('restaurant').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
     "photo mimetype" : bfile.mimetype,
-	  "name": reqname
 			
   }, function(err,result) {
     if (err) {
