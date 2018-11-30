@@ -28,7 +28,29 @@ var fileUpload = require('express-fileupload');
 
 app.use(fileUpload());   
 
+app.post('/upload', function(req, res) {
+    var sampleFile;
 
+    if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
+    }
+
+    MongoClient.connect(mongourl,function(err,db) {
+      console.log('Connected to mlab.com');
+      assert.equal(null,err);
+      create(db, req.files.sampleFile, function(result) {
+        db.close();
+        if (result.insertedId != null) {
+          res.status(200);
+          res.end('Inserted: ' + result.insertedId)
+        } else {
+          res.status(500);
+          res.end(JSON.stringify(result));
+        }
+      });
+    });
+});
 
 
 function create(db,bfile,callback) {
@@ -158,24 +180,7 @@ app.post('/create',function(req,res) {
 			},
 			"owner":req.body.owner
 						      });
-		
-	var sampleFile;
-
-    if (!req.files) {
-        res.send('No files were uploaded.');
-        return;
-    }
-
-      create(db, req.files.sampleFile, function(result) {
-        db.close();
-        if (result.insertedId != null) {
-          res.status(200);
-          res.redirect('/create')
-        } else {
-          res.status(500);
-          res.end(JSON.stringify(result));
-        }
-      });
+	
     });
 res.redirect('/');
 });
