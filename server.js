@@ -43,7 +43,7 @@ app.post('/upload', function(req, res) {
         db.close();
         if (result.insertedId != null) {
           res.status(200);
-          res.end('Inserted: ' + result.insertedId)
+          res.redirect('/create')
         } else {
           res.status(500);
           res.end(JSON.stringify(result));
@@ -179,9 +179,11 @@ app.post('/create',function(req,res) {
 			"score":req.body.score
 			},
 			"owner":req.body.owner
+			
+			
+			
 						      });
-	
-    });
+		});
 res.redirect('/');
 });
 app.get('/showdetails', function(req,res) {
