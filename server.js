@@ -168,7 +168,7 @@ app.get('/gps',function(req,res) {
 		res.redirect('/login');
 	} else {
 		res.status(200);
-		res.render('create',{name:req.session.username});
+		res.render('gps',{name:req.session.username});
 	}
 });
 app.get('/login',function(req,res) {
