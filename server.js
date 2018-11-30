@@ -26,8 +26,7 @@ var users = new Array(
 var express = require('express');
 var fileUpload = require('express-fileupload');
 
-// middlewares
-app.use(fileUpload());   // add 'files' object to req
+app.use(fileUpload());   
 
 app.post('/upload', function(req, res) {
     var sampleFile;
@@ -60,7 +59,6 @@ function create(db,bfile,callback) {
     "photo" : new Buffer(bfile.data).toString('base64'),
     "photo mimetype" : bfile.mimetype,
   }, function(err,result) {
-    //assert.equal(err,null);
     if (err) {
       console.log('insertOne Error: ' + JSON.stringify(err));
       result = err;
@@ -71,18 +69,7 @@ function create(db,bfile,callback) {
   });
 }
 
-function read(db,target,callback) {
-  var bfile = null;
-  var mimetype = null;
-  db.collection('restaurant').findOne({"_id": ObjectId(target)}, function(err,doc) {
-    assert.equal(err,null);
-    if (doc != null) {
-      bfile = new Buffer(doc.data,'base64');
-      mimetype = doc.mimetype;
-    }
-    callback(bfile,mimetype);
-  });
-}
+
 
 
 
