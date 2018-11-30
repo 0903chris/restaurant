@@ -163,12 +163,13 @@ app.get('/logout',function(req,res) {
 app.post('/create',function(req,res) {
 	MongoClient.connect(mongourl, function(err,db){
 		assert.equal(err,null);
+		  var bfile=req.files.sampleFile;
 		db.collection('restaurant').insertOne({
 			"name":req.body.name,
 			"borough":req.body.borough,
 			"cuisine":req.body.cuisine,
-
-			"photomimetype" : req.files.sampleFile.mimetype,
+ 			"photo" : new Buffer(bfile.data).toString('base64'),
+    			"photo mimetype" : bfile.mimetype
 			"street":req.body.street,
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
