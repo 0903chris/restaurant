@@ -58,7 +58,16 @@ function create(db,bfile,rrr,callback) {
   db.collection('photo').insertOne({
     "photo" : new Buffer(bfile.data).toString('base64'),
     "photo mimetype" : bfile.mimetype,
-	  "name":rrr.name
+	 "name":rrr.name,
+	"borough": rrr.borough,
+	"cuisine": rrr.cuisine,
+	  "street":rrr.street,
+	"building":rrr.building,
+	"zipcode":rrr.zipcode,
+	"longtitude":rrr.gps1,
+	"latitude":rrr.gps2
+	  
+	  
   }, function(err,result) {
     if (err) {
       console.log('insertOne Error: ' + JSON.stringify(err));
