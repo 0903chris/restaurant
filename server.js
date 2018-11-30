@@ -65,11 +65,7 @@ function create(db,bfile,callback) {
 			"building":req.body.building,
 			"zipcode":req.body.zipcode,
 			"longtitude":req.body.gps1,
-			"latitude":req.body.gps2,
-			"grade":{
-			"user":req.session.username,
-			"score":req.body.score
-			}		
+			"latitude":req.body.gps2	
 			
   }, function(err,result) {
     if (err) {
