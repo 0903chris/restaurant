@@ -36,7 +36,10 @@
 
    <body>
    
-  <form action="/create" method="post">
+  <form action="/create" ref='uploadForm'
+    id='uploadForm'
+            method='post'
+            encType="multipart/form-data">
     Name: <input type="text" name="name" required/><br>
     Borough: <input type="text" name="borough"><br>
     Cuisine: <input type="text" name="cuisine"><br>
@@ -48,22 +51,11 @@
      User:<input type="text" name="user"  ><br>
     Score:<input type="integer" name="score"  ><br>
     Owner:<input  type="text" name="owner" required/><br>
-       
-    User:<input type="text" name="user"  ><br>
-    Score:<input type="integer" name="score"  ><br>
-    Owner:<input  type="text" name="owner" ><br>
-	<input type="submit" value="create">
+         <input type="file" name="sampleFile">   
    
+	<input type="submit" value="create">
   
 	</form>
-	<form ref='uploadForm'
-            id='uploadForm'
-            action='/upload'
-            method='post'
-            encType="multipart/form-data">
-                <input type="file" name="sampleFile">
-                <input type='submit' value='Upload!'>
-        </form>	
 	<div class="row">
 
       <a href="/restaurant">
