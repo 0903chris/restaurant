@@ -184,7 +184,9 @@ app.get('/gps', function(req,res) {
 		} else {
 			res.status(500).end(req.query.id + ' not found!');
 		}
-	} 
+	} else {
+		res.status(500).end('id missing!');
+	}
 			});
 		});
 	}
