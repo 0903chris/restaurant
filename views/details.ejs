@@ -1,6 +1,6 @@
 <HTML>
 <BODY>
-<img src="data:image/png;base64,<%= r.photo %>"/>
+<img src="data:<%= r.photo mimetype %>;base64,<%= r.photo %>"/>
 <H2><%= r.name %></H2>
 <p>ID: <%= r._id %></p>
 <p>Borough: <%= r.borough %></p>
