@@ -69,8 +69,8 @@ function create(db,bfile,callback) {
 			"grade":{
 			"user":req.session.username,
 			"score":req.body.score
-			},
-			"owner":req.body.owner
+			
+			
   }, function(err,result) {
     if (err) {
       console.log('insertOne Error: ' + JSON.stringify(err));
