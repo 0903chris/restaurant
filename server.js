@@ -289,7 +289,9 @@ app.post('/update',function(req,res) {
 			    "building": req.body.building,
 			    "zipcode": req.body.zipcode,
 			    "longtitude": req.body.gps1,
-			    "latitude": req.body.gps2
+			    "latitude": req.body.gps2,
+			"photo": req.body.photo,
+			    "photo mimetype": req.body.photomimetype
 			}
 		});	
 	});
