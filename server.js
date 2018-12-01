@@ -89,7 +89,7 @@ function create(db,bfile,rrr,sss,callback) {
 	"latitude":rrr.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype,
-	"owner":rrr.username
+	"owner":sss.username
 	
 	  
 	  
@@ -114,7 +114,7 @@ app.post('/upload', function(req, res) {
     MongoClient.connect(mongourl,function(err,db) {
       console.log('Connected to mlab.com');
       assert.equal(null,err);
-      create(db, req.files.sampleFile,req.body, function(result) {
+      create(db, req.files.sampleFile,req.body,req.session, function(result) {
         db.close();
         if (result.insertedId != null) {
           res.status(200);
