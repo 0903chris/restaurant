@@ -49,6 +49,29 @@ app.get('/read',function(req,res) {
         	});									
 	}
 });
+app.post('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find({$or:[
+			{name:req.body.search}, 
+			{borough:req.body.search}, 
+			{cuisine:req.body.search}, 
+			{street:req.body.search}, 
+		 	{building:req.body.search}, 
+			{zipcode:req.body.search}, 
+			{gps1:req.body.search}, 
+			{gps2:req.body.search}, 
+			{owner:req.body.search}]}).toArray(function(err,items){
+				res.render('restaurant',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
 app.get('/login',function(req,res) {
 	res.sendFile(__dirname + '/public/login.html');
 });
