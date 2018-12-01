@@ -148,7 +148,7 @@ app.post('/create',function(req,res) {
 			"zipcode":req.body.zipcode,
 			"longtitude":req.body.gps1,
 			"latitude":req.body.gps2,
-			"owner":req.session.username
+			"owner":req.session.name
 			  });
 		});
 res.redirect('/');
