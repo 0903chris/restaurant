@@ -207,11 +207,12 @@ app.get('/showdetails', function(req,res) {
 			db.collection("grade").find({rname: rn}).toArray(function(err,rnames){
 					res.render('details', {r: items[i], g: rnames});
 			});
-			} else {
+		} else {
 			res.status(500).end(req.query.id + ' not found!');
-	} else {
-		res.status(500).end('id missing!');
-	}
+		}
+		} else {
+			res.status(500).end('id missing!');
+		}
 			});
 		});
 	}
