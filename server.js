@@ -284,9 +284,7 @@ app.post('/update',function(req,res) {
 			$set: {
 			    "name": req.body.name,
 			    "borough": req.body.borough,
-			    "cuisine": req.body.cuisine,
-			    "photo": req.body.photo,
-			    "photo mimetype": req.body.photomimetype,
+			    "cuisine": req.body.cuisin,
 			    "street": req.body.street,
 			    "building": req.body.building,
 			    "zipcode": req.body.zipcode,
