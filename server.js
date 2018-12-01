@@ -304,7 +304,7 @@ app.get('/remove',function(req,res) {
 	} else {
 		MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
-        	db.collection("restaurants").find().toArray(function(err,items){
+        	db.collection("restaurant").find().toArray(function(err,items){
 		var item = null;
 		var owner = null;
 		if (req.query.id) {
