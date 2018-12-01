@@ -89,7 +89,6 @@ function create(db,bfile,rrr,callback) {
 	"latitude":rrr.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype
-	"owner":req.session.username
 	  
 	  
   }, function(err,result) {
@@ -359,5 +358,27 @@ app.post('/rate',function(req,res) {
 		});
 	});
 });
-
+app.post('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurants").find({$or:[
+			{name:req.body.search}, 
+			{borough:req.body.search}, 
+			{cuisine:req.body.search}, 
+			{street:req.body.search}, 
+		 	{building:req.body.search}, 
+			{zipcode:req.body.search}, 
+			{gps1:req.body.search}, 
+			{gps2:req.body.search}, 
+			{owner:req.body.search}]}).toArray(function(err,items){
+				res.render('restaurants',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
 app.listen(process.env.PORT || 8099);
