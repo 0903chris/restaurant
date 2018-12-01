@@ -193,18 +193,20 @@ app.get('/showdetails', function(req,res) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		var item = null;
+		var rest = null;
+		var rn = null;
 		if (req.query.id) {
 		for (i in items) {
 			if (items[i]._id == req.query.id) {
-				item = items[i]
+				item = items[i];
+				rn = items[i].name;
 				break;
 			}
 		}
 		if (item) {
-			res.render('details', {r: items[i]});							
-		} else {
-			res.status(500).end(req.query.id + ' not found!');
-		}
+			db.collection("grade").find({rname: rn}).toArray(function(err,rnames){
+					res.render('details', {r: items[i], g: rnames});
+			});
 	} else {
 		res.status(500).end('id missing!');
 	}
