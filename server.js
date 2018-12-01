@@ -89,7 +89,7 @@ function create(db,bfile,rrr,sss,callback) {
 	"latitude":rrr.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype,
-	"owner":sss.
+	"owner":sss.username
 	  
 	  
   }, function(err,result) {
