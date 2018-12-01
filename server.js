@@ -43,31 +43,8 @@ app.get('/read',function(req,res) {
 	else {
 		MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
-        	db.collection("restaurants").find().toArray(function(err,items){
-		res.render('restaurants',{name:req.session.username, r:items});
-			});
-        	});									
-	}
-});
-app.post('/read',function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurants").find({$or:[
-			{name:req.body.search}, 
-			{borough:req.body.search}, 
-			{cuisine:req.body.search}, 
-			{street:req.body.search}, 
-		 	{building:req.body.search}, 
-			{zipcode:req.body.search}, 
-			{gps1:req.body.search}, 
-			{gps2:req.body.search}, 
-			{owner:req.body.search}]}).toArray(function(err,items){
-				res.render('restaurants',{name:req.session.username, r:items});
+        	db.collection("restaurant").find().toArray(function(err,items){
+		res.render('restaurant',{name:req.session.username, r:items});
 			});
         	});									
 	}
@@ -216,26 +193,21 @@ app.get('/showdetails', function(req,res) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		var item = null;
-		var rest = null;
-		var rn = null;
 		if (req.query.id) {
 		for (i in items) {
 			if (items[i]._id == req.query.id) {
-				item = items[i];
-				rn = items[i].name;
+				item = items[i]
 				break;
 			}
 		}
 		if (item) {
-			db.collection("grades").find({rname: rn}).toArray(function(err,rnames){
-					res.render('details', {r: items[i], g: rnames});
-			});
+			res.render('details', {r: items[i]});							
 		} else {
 			res.status(500).end(req.query.id + ' not found!');
 		}
-		} else {
-			res.status(500).end('id missing!');
-		}
+	} else {
+		res.status(500).end('id missing!');
+	}
 			});
 		});
 	}
