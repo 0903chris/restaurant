@@ -89,7 +89,7 @@ function create(db,bfile,rrr,callback) {
 	"latitude":rrr.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype
-
+	"owner":req.session.username
 	  
 	  
   }, function(err,result) {
@@ -148,7 +148,7 @@ app.post('/create',function(req,res) {
 			"zipcode":req.body.zipcode,
 			"longtitude":req.body.gps1,
 			"latitude":req.body.gps2,
-			"owner":req.session.name
+			"owner":req.session.username
 			  });
 		});
 res.redirect('/');
