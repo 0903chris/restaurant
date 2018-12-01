@@ -35,6 +35,20 @@ app.get('/',function(req,res) {
 		res.redirect('/read');;
 	}
 });
+app.get('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurants").find().toArray(function(err,items){
+		res.render('restaurants',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
 app.post('/read',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
