@@ -37,7 +37,7 @@
    <div class="jumbotron text-center container=fluid">
       <H1>Restaurants</H1>
       <p>User: <%= name %></p>
-      <p>Showing <%= r.length %> restaurants</p>
+      <p>Total: <%= r.length %> restaurants</p>
       </div>
       <div class="container-fluid">
     <div class="row">
@@ -54,7 +54,7 @@
    </form>
     <ol>
   <% r.forEach(function(rest) { %>
-  <a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a><br>
+  <a style="text-align:center;href=/showdetails?id=<%= rest._id %>><%= rest.name %></a><br>
   <% });                        %>
 </ol>
    
