@@ -37,12 +37,12 @@
    <div class="jumbotron text-center container=fluid">
       <H1>Restaurants</H1>
       <p>User: <%= name %></p>
-      <p>Showing <%= r.length %> documents</p>
+      <p>Showing <%= r.length %> restaurants</p>
       </div>
       <div class="container-fluid">
     <div class="row">
       <a href="/create">
-        <button class="btn btn-default">Create New Restaurant</button>
+        <button  style="text-align:center class="btn btn-default">Create New Restaurant</button>
       </a>
        <a href="/read">
         <button class="btn btn-default">All restaurants</button>
@@ -54,7 +54,7 @@
    </form>
     <ol>
   <% r.forEach(function(rest) { %>
-  <li><a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a></li>
+  <a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a>
   <% });                        %>
 </ol>
    
