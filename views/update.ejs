@@ -47,6 +47,7 @@
             action='/update'
             method='post'
             encType="multipart/form-data">
+	    <input type="hidden" name="id" value=<%= r._id %>>
   	<p><label class="w3-label w3-validate">Name: </label><br>
 	<input type="text" name="name" value=<%= r.name %> required/></p>
     	<p><label class="w3-label w3-validate">Borough: </label><br>
