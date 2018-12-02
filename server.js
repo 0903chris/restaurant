@@ -9,24 +9,22 @@ var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
 var assert= require('assert');
 var ObjectId=require('mongodb').ObjectID;
 var formidable = require('formidable');
-var fileUpload = require('express-fileupload'); 
+ 
+app = express();
+app.set('view engine','ejs');
+
 var SECRETKEY1 = 'COMPS381F mini project';
 var SECRETKEY2 = 'Restaurant';
+
 var users = new Array(
 	{name: 'demo', password: ''},
 	{name: 'guest', password: 'guest'}
-app = express();
-
-app.set('view engine','ejs');
 );
-
 app.use(session({
   name: 'session',
   keys: [SECRETKEY1,SECRETKEY2]
 }));
-
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
 
 app.get('/',function(req,res) {
@@ -37,7 +35,6 @@ app.get('/',function(req,res) {
 		res.redirect('/read');;
 	}
 });
-
 app.get('/read',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -52,7 +49,6 @@ app.get('/read',function(req,res) {
         	});									
 	}
 });
-
 app.post('/read',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -76,7 +72,6 @@ app.post('/read',function(req,res) {
         	});									
 	}
 });
-
 app.get('/login',function(req,res) {
 	res.sendFile(__dirname + '/public/login.html');
 });
@@ -96,8 +91,13 @@ app.get('/logout',function(req,res) {
 	req.session = null;
 	res.redirect('/');
 });
+var express = require('express');
+var fileUpload = require('express-fileupload');
 
 app.use(fileUpload());   
+
+
+
 
 function create(db,bfile,rb,rs,callback) {
   console.log(bfile);
@@ -113,6 +113,9 @@ function create(db,bfile,rb,rs,callback) {
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype,
 	"owner":rs.username
+	
+	  
+	  
   }, function(err,result) {
     if (err) {
       console.log('insertOne Error: ' + JSON.stringify(err));
@@ -123,34 +126,26 @@ function create(db,bfile,rb,rs,callback) {
     callback(result);
   });
 }
-
 app.post('/upload', function(req, res) {
     var sampleFile;
-    
-     if (!req.files.sampleFile) {
-        MongoClient.connect(mongourl,function(err,db) {
-      	assert.equal(null,err);
-	db.collection('restaurant').insertOne({
-		"name":req.body.name,
-		"borough": req.body.borough,
-		"cuisine": req.body.cuisine,
-		"street":req.body.street,
-		"building":req.body.building,
-		"zipcode":req.body.zipcode,
-		"longtitude":req.body.gps1,
-		"latitude":req.body.gps2,
-		"owner":req.session.username
-	});
-	});
-	res.redirect('/')
-	return;
+
+    if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
     }
-	
+
     MongoClient.connect(mongourl,function(err,db) {
+      console.log('Connected to mlab.com');
       assert.equal(null,err);
       create(db, req.files.sampleFile,req.body,req.session, function(result) {
         db.close();
-        res.redirect('/')
+        if (result.insertedId != null) {
+          res.status(200);
+          res.redirect('/create')
+        } else {
+          res.status(500);
+          res.end(JSON.stringify(result));
+        }
       });
     });
 });
@@ -163,7 +158,25 @@ app.get('/create',function(req,res) {
 		res.render('create',{name:req.session.username});
 	}
 });
-
+app.post('/create',function(req,res) {
+	MongoClient.connect(mongourl, function(err,db){
+		assert.equal(err,null);
+		db.collection('restaurant').insertOne({
+			"name":req.body.name,
+			"borough":req.body.borough,
+			"cuisine":req.body.cuisine,
+			"photo":req.body.photo,
+			"photomimetype":req.body.photomimetype,
+			"street":req.body.street,
+			"building":req.body.building,
+			"zipcode":req.body.zipcode,
+			"longtitude":req.body.gps1,
+			"latitude":req.body.gps2,
+			"owner":req.session.username
+			  });
+		});
+res.redirect('/');
+});
 app.get('/gps', function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -193,7 +206,6 @@ app.get('/gps', function(req,res) {
 		});
 	}
 });
-
 app.get('/showdetails', function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -228,7 +240,6 @@ app.get('/showdetails', function(req,res) {
 		});
 	}
 });
-
 app.get('/edit',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -328,6 +339,7 @@ function update(db,bfile,rrr,callback) {
 			});
 }
 
+
 app.get('/remove',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -366,7 +378,6 @@ app.get('/remove',function(req,res) {
 		});
 	}
 });
-
 app.get('/rate',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
