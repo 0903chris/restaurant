@@ -47,18 +47,25 @@
             action='/update'
             method='post'
             encType="multipart/form-data">
-  	<input type="hidden" name="id" value=<%= r._id %>>
-   	 Name: <input type="text" name="name" value=<%= r.name %> required/><br>
-    	 Borough: <input type="text" name="borough" value=<%= r.borough %>><br>
-    	 Cuisine: <input type="text" name="cuisine" value=<%= r.cuisine %>><br>
-    	 Street: <input type="text" name="street"value=<%= r.street %>><br>
-    	 Building: <input type="text" name="building"value=<%= r.building %>><br>
-    	 Zipcode: <input type="text" name="zipcode"value=<%= r.zipcode %>><br>
-    	 Coordinates (lon.): <input type="text" name="gps1"value=<%= r.longtitude %>><br>
-    	 Coordinates (lat.) <input type="text" name="gps2"value=<%= r.latitude %>><br>
-    	 Photo: <input type="file" name="sampleFile"><br>
-    
-	<input type="submit" value="Edit">
+  	<p><label class="w3-label w3-validate">Name: </label><br>
+	<input type="text" name="name" value=<%= r.name %> required/></p>
+    	<p><label class="w3-label w3-validate">Borough: </label><br>
+	<input type="text" name="borough" value=<%= r.borough %>></p>
+    	<p><label class="w3-label w3-validate">Cuisine: </label><br>
+	<input type="text" name="cuisine"value=<%= r.cuisine %>></p>
+    	<p><label class="w3-label w3-validate">Street: </label><br>
+	<input type="text" name="street"value=<%= r.street %>></p>
+   	<p><label class="w3-label w3-validate">Building: </label><br>
+	<input type="text" name="building"value=<%= r.building %>></p>
+    	<p><label class="w3-label w3-validate">Zipcode: </label><br>
+	<input type="text" name="zipcode"value=<%= r.zipcode %>></p>
+    	<p><label class="w3-label w3-validate">Coordinates (lon.): </label><br>
+	<input type="text" name="gps1"value=<%= r.longtitude %>></p>
+    	<p><label class="w3-label w3-validate">Coordinates (lat.): </label><br>
+	<input type="text" name="gps2"value=<%= r.latitude %>></p>
+	<p><label class="w3-label w3-validate">Photo: </label><br>
+	<input type="file" name="sampleFile"></p>
+        <p><input type='submit' value='Edit'></p>
   
 	</form>
 	<a href="/">
