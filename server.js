@@ -13,8 +13,8 @@ var formidable = require('formidable');
 app = express();
 app.set('view engine','ejs');
 
-var SECRETKEY1 = 'I want to pass COMPS381F';
-var SECRETKEY2 = 'Keep this to yourself';
+var SECRETKEY1 = 'COMPS381F mini project';
+var SECRETKEY2 = 'Restaurant';
 
 var users = new Array(
 	{name: 'demo', password: ''},
@@ -99,20 +99,20 @@ app.use(fileUpload());
 
 
 
-function create(db,bfile,rrr,sss,callback) {
+function create(db,bfile,rb,rs,callback) {
   console.log(bfile);
   db.collection('restaurant').insertOne({
-	"name":rrr.name,
-	"borough": rrr.borough,
-	"cuisine": rrr.cuisine,
-	"street":rrr.street,
-	"building":rrr.building,
-	"zipcode":rrr.zipcode,
-	"longtitude":rrr.gps1,
-	"latitude":rrr.gps2,
+	"name":rb.name,
+	"borough": rb.borough,
+	"cuisine": rb.cuisine,
+	"street":rb.street,
+	"building":rb.building,
+	"zipcode":rb.zipcode,
+	"longtitude":rb.gps1,
+	"latitude":rb.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype,
-	"owner":sss.username
+	"owner":rs.username
 	
 	  
 	  
