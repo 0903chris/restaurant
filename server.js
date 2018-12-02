@@ -308,7 +308,7 @@ app.post('/update', function(req, res) {
 			}
 			});	
 	}); 
-	res.redirect('/updateok')
+	res.redirect('/')
         return;
     }
     	MongoClient.connect(mongourl,function(err,db) {
@@ -316,23 +316,23 @@ app.post('/update', function(req, res) {
       	assert.equal(null,err);
      	 update(db, req.files.sampleFile,req.body, function(result) {
        	 db.close();
-       	 res.redirect('/');
+       	 res.redirect('/updateok');
      	 });
     	});
 });
 
-function update(db,bfile,a,callback) {
+function update(db,bfile,x,callback) {
   console.log(bfile);
- db.collection('restaurant').update({_id: ObjectId(a.id)}, {
+ db.collection('restaurant').update({_id: ObjectId(x.id)}, {
 			$set: {
-			    "name": a.name,
-			    "borough": a.borough,
-			    "cuisine": a.cuisine,
-			    "street": a.street,
-			    "building": a.building,
-			    "zipcode": a.zipcode,
-			    "longtitude": a.gps1,
-			    "latitude": a.gps2,
+			    "name": x.name,
+			    "borough": x.borough,
+			    "cuisine": x.cuisine,
+			    "street": x.street,
+			    "building": x.building,
+			    "zipcode": x.zipcode,
+			    "longtitude": x.gps1,
+			    "latitude": x.gps2,
 			    "photo" : new Buffer(bfile.data).toString('base64'),
 			    "photo mimetype" : bfile.mimetype
 			}	  
@@ -340,9 +340,9 @@ function update(db,bfile,a,callback) {
   }, function(err,result) {
     callback(result);
   });
-	db.collection('grade').update({r_id: a.id}, {
+	db.collection('grade').update({r_id: x.id}, {
 			$set: {
-			    "rname": a.name
+			    "rname": x.name
 			}
 			});
 }
