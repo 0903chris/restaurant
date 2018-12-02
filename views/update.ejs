@@ -38,7 +38,11 @@
 </style>
 
    <body>
-   	<img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>"/>
+   <script>
+	if(<%= r.photomimetype %>!=null){
+	<img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" />
+	}
+   </script>
    	<form ref='uploadForm'
             id='uploadForm'
             action='/update'
