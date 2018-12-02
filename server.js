@@ -290,8 +290,8 @@ app.post('/update', function(req, res) {
 			    "street": req.body.street,
 			    "building": req.body.building,
 			    "zipcode": req.body.zipcode,
-			    "gps1": req.body.longtitude,
-			    "gps2": req.body.latitude
+			    "longtitude": req.body.gps1,
+			    "latitude": req.body.gps2
 			}
 			});
 			db.collection('grade').update({r_id: req.body.id}, {
@@ -323,8 +323,8 @@ function update(db,bfile,rrr,callback) {
 			    "street": rrr.street,
 			    "building": rrr.building,
 			    "zipcode": rrr.zipcode,
-			    "gps1": rrr.gps1,
-			    "gps2": rrr.gps2,
+			    "longtitude": rrr.gps1,
+			    "latitude": rrr.gps2,
 			    "photo" : new Buffer(bfile.data).toString('base64'),
 			    "photo mimetype" : bfile.mimetype
 			}	  
