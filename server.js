@@ -145,7 +145,7 @@ app.post('/upload', function(req, res) {
 		
 	});
 	});
-	res.redirect('/')
+	res.redirect('/showdetails')
 	return;
     }
 	
@@ -185,7 +185,7 @@ app.post('/create',function(req,res) {
 			  });
 		
 		});
-res.redirect('/showdetails');
+res.redirect('/');
 });
 app.get('/gps', function(req,res) {
 	console.log(req.session);
