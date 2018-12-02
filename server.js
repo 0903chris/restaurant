@@ -290,8 +290,8 @@ app.post('/update', function(req, res) {
 			    "street": req.body.street,
 			    "building": req.body.building,
 			    "zipcode": req.body.zipcode,
-			    "gps1": req.body.gps1,
-			    "gps2": req.body.gps2
+			    "gps1": req.body.longtitude,
+			    "gps2": req.body.latitude
 			}
 			});
 			db.collection('grade').update({r_id: req.body.id}, {
