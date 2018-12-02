@@ -308,7 +308,7 @@ app.post('/update', function(req, res) {
 			}
 			});	
 	}); 
-	res.redirect('/')
+	res.redirect('updateok')
         return;
     }
     	MongoClient.connect(mongourl,function(err,db) {
@@ -316,7 +316,7 @@ app.post('/update', function(req, res) {
       	assert.equal(null,err);
      	 update(db, req.files.sampleFile,req.body, function(result) {
        	 db.close();
-       	 res.redirect('/updateok');
+       	 res.redirect('/');
      	 });
     	});
 });
