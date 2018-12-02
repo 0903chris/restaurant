@@ -145,7 +145,7 @@ app.post('/upload', function(req, res) {
 		
 	});
 	});
-	res.render('/showdetails',{id:req.body.id});
+	res.redirect('/showdetails',{id:req.body.id});
 	return;
     }
 	
