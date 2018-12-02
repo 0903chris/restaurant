@@ -37,11 +37,8 @@
   }
 </style>
 <BODY>
-<script>
-if(<%= r.photomimetype %>!=null){
+
 <img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" />
-}
-</script>
 <H2><%= r.name %></H2>
 <p>Borough: <%= r.borough %></p>
 <p>Cuisine: <%= r.cuisine %></p>
