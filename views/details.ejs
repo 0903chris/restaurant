@@ -38,8 +38,21 @@
 </style>
 <BODY>
 <script>
-if(<%= r.photo %>!=" ")
-<img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" />
+var image = new Image();
+
+image.onload = function() {
+    // image exists and is loaded
+    document.body.appendChild(image);
+}
+image.onerror = function() {
+    // image did not load
+
+    var err = new Image();
+    err.src = ' ';
+
+    document.body.appendChild(err);
+}
+image.src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" ;
 </script>
 <H2><%= r.name %></H2>
 <div class="w3-container">
