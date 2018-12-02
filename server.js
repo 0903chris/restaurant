@@ -308,7 +308,7 @@ app.post('/update', function(req, res) {
 			}
 			});	
 	}); 
-	res.redirect('updateok')
+	res.render('updateok')
         return;
     }
     	MongoClient.connect(mongourl,function(err,db) {
