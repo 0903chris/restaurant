@@ -128,24 +128,31 @@ function create(db,bfile,rb,rs,callback) {
 }
 app.post('/upload', function(req, res) {
     var sampleFile;
-
-    if (!req.files) {
-        res.send('No files were uploaded.');
-        return;
+    
+     if (!req.files.sampleFile) {
+        MongoClient.connect(mongourl,function(err,db) {
+      	assert.equal(null,err);
+	db.collection('restaurant').insertOne({
+		"name":req.body.name,
+		"borough": req.body.borough,
+		"cuisine": req.body.cuisine,
+		"street":req.body.street,
+		"building":req.body.building,
+		"zipcode":req.body.zipcode,
+		"longtitude":req.body.gps1,
+		"latitude":req.body.gps2,
+		"owner":req.session.username
+	});
+	});
+	res.redirect('/')
+	return;
     }
-
+	
     MongoClient.connect(mongourl,function(err,db) {
-      console.log('Connected to mlab.com');
       assert.equal(null,err);
       create(db, req.files.sampleFile,req.body,req.session, function(result) {
         db.close();
-        if (result.insertedId != null) {
-          res.status(200);
-          res.redirect('/create')
-        } else {
-          res.status(500);
-          res.end(JSON.stringify(result));
-        }
+        res.redirect('/')
       });
     });
 });
