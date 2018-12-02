@@ -303,28 +303,28 @@ app.post('/update', function(req, res) {
     	});
 });
 
-function update(db,bfile,r,callback) {
-  	console.log(bfile);
- 	db.collection('restaurant').update({_id: ObjectId(r.id)}, {
-		$set: {
-			    "name": r.name,
-			    "borough": r.borough,
-			    "cuisine": r.cuisine,
-			    "street": r.street,
-			    "building": r.building,
-			    "zipcode": r.zipcode,
-			    "longtitude": r.gps1,
-			    "latitude": r.gps2,
+function update(db,bfile,rrr,callback) {
+  console.log(bfile);
+ db.collection('restaurant').update({_id: ObjectId(rrr.id)}, {
+			$set: {
+			    "name": rrr.name,
+			    "borough": rrr.borough,
+			    "cuisine": rrr.cuisine,
+			    "street": rrr.street,
+			    "building": rrr.building,
+			    "zipcode": rrr.zipcode,
+			    "longtitude": rrr.gps1,
+			    "latitude": rrr.gps2,
 			    "photo" : new Buffer(bfile.data).toString('base64'),
 			    "photo mimetype" : bfile.mimetype
-			}	    
-  	}, 
-		function(err,result) {
-    		callback(result);
-  	});
-	db.collection('grade').update({r_id: r.id}, {
+			}	  
+	  
+  }, function(err,result) {
+    callback(result);
+  });
+	db.collection('grade').update({r_id: rrr.id}, {
 			$set: {
-			    "rname": r.name
+			    "rname": rrr.name
 			}
 			});
 }
