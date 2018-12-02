@@ -52,11 +52,24 @@
        <input type="text" name="search">
        <input type="submit" value="search"></p>
    </form>
-    <ol>
+    <div class="row">
+      <table class="table table-striped table-bordered table-hover table-scroll">
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
   <% r.forEach(function(rest) { %>
-  <p style="text-align:center;"><a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a><br></p>
+ <tr>
+              <td class=> <a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a>
   <% });                        %>
-</ol>
+</td>
+</tr>
+</tbody>
+</table>
    
    </body>
 </html>
