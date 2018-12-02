@@ -9,17 +9,17 @@ var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
 var assert= require('assert');
 var ObjectId=require('mongodb').ObjectID;
 var formidable = require('formidable');
-var fileUpload = require('express-fileupload'); 
-app = express();
-app.set('view engine','ejs');
-
+var fileUpload = require('express-fileupload');
 var SECRETKEY1 = 'COMPS381F mini project';
 var SECRETKEY2 = 'Restaurant';
-
 var users = new Array(
 	{name: 'demo', password: ''},
 	{name: 'guest', password: 'guest'}
 );
+
+app = express();
+
+app.set('view engine','ejs');
 
 app.use(session({
   name: 'session',
@@ -112,8 +112,8 @@ function create(db,bfile,rb,rs,callback) {
 	"latitude":rb.gps2,
 	"photo" : new Buffer(bfile.data).toString('base64'),
 	"photo mimetype" : bfile.mimetype,
-	"owner":rs.username
-  }, function(err,result) {
+	"owner":rs.username}, 
+  function(err,result) {
     if (err) {
       console.log('insertOne Error: ' + JSON.stringify(err));
       result = err;
@@ -121,7 +121,7 @@ function create(db,bfile,rb,rs,callback) {
       console.log("Inserted _id = " + result.insertId);
     }
     callback(result);
-  });
+});
 }
 
 app.post('/upload', function(req, res) {
@@ -165,35 +165,6 @@ app.get('/create',function(req,res) {
 	}
 });
 
-app.get('/gps', function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurant").find().toArray(function(err,items){
-		var item = null;
-		if (req.query.id) {
-		for (i in items) {
-			if (items[i]._id == req.query.id) {
-				item = items[i]
-				break;
-			}
-		}
-		if (item) {
-			res.render('gps', {r: items[i]});							
-		} else {
-			res.status(500).end(req.query.id + ' not found!');
-		}
-	} else {
-		res.status(500).end('id missing!');
-	}
-			});
-		});
-	}
-});
 app.get('/showdetails', function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -228,6 +199,37 @@ app.get('/showdetails', function(req,res) {
 		});
 	}
 });
+
+app.get('/gps', function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		var item = null;
+		if (req.query.id) {
+		for (i in items) {
+			if (items[i]._id == req.query.id) {
+				item = items[i]
+				break;
+			}
+		}
+		if (item) {
+			res.render('gps', {r: items[i]});							
+		} else {
+			res.status(500).end(req.query.id + ' not found!');
+		}
+	} else {
+		res.status(500).end('id missing!');
+	}
+	});
+	});
+	}
+});
+
 app.get('/edit',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -301,32 +303,31 @@ app.post('/update', function(req, res) {
     	});
 });
 
-function update(db,bfile,rrr,callback) {
-  console.log(bfile);
- db.collection('restaurant').update({_id: ObjectId(rrr.id)}, {
-			$set: {
-			    "name": rrr.name,
-			    "borough": rrr.borough,
-			    "cuisine": rrr.cuisine,
-			    "street": rrr.street,
-			    "building": rrr.building,
-			    "zipcode": rrr.zipcode,
-			    "longtitude": rrr.gps1,
-			    "latitude": rrr.gps2,
+function update(db,bfile,r,callback) {
+  	console.log(bfile);
+ 	db.collection('restaurant').update({_id: ObjectId(r.id)}, {
+		$set: {
+			    "name": r.name,
+			    "borough": r.borough,
+			    "cuisine": r.cuisine,
+			    "street": r.street,
+			    "building": r.building,
+			    "zipcode": r.zipcode,
+			    "longtitude": r.gps1,
+			    "latitude": r.gps2,
 			    "photo" : new Buffer(bfile.data).toString('base64'),
 			    "photo mimetype" : bfile.mimetype
-			}	  
-	  
-  }, function(err,result) {
-    callback(result);
-  });
-	db.collection('grade').update({r_id: rrr.id}, {
+			}	    
+  	}, 
+		function(err,result) {
+    		callback(result);
+  	});
+	db.collection('grade').update({r_id: r.id}, {
 			$set: {
-			    "rname": rrr.name
+			    "rname": r.name
 			}
 			});
 }
-
 
 app.get('/remove',function(req,res) {
 	console.log(req.session);
@@ -366,6 +367,7 @@ app.get('/remove',function(req,res) {
 		});
 	}
 });
+
 app.get('/rate',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
