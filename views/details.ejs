@@ -15,6 +15,9 @@
 </head>
 
 <style type="text/css">
+  img{
+  width:40%
+  }
   .well {
       background: none;
       height: 320px;
@@ -34,7 +37,7 @@
   }
 </style>
 <BODY>
-<img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" height="200" width="150"/>
+<img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" />
 <H2><%= r.name %></H2>
 <p>Borough: <%= r.borough %></p>
 <p>Cuisine: <%= r.cuisine %></p>
