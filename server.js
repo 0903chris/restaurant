@@ -277,25 +277,68 @@ app.get('/edit',function(req,res) {
 	}
 });
 
-app.post('/update',function(req,res) {
-	MongoClient.connect(mongourl, function(err, db) {
+app.post('/update', function(req, res) {
+    var sampleFile;
+    if (!req.files.sampleFile) {
+        MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
 			db.collection('restaurant').update({_id: ObjectId(req.body.id)}, {
 			$set: {
 			    "name": req.body.name,
 			    "borough": req.body.borough,
-			    "cuisine": req.body.cuisin,
+			    "cuisine": req.body.cuisine,
 			    "street": req.body.street,
 			    "building": req.body.building,
 			    "zipcode": req.body.zipcode,
-			    "longtitude": req.body.gps1,
-			    "latitude": req.body.gps2
-			
+			    "gps1": req.body.gps1,
+			    "gps2": req.body.gps2
 			}
-		});	
-	});
-	res.redirect('/');
+			});
+			db.collection('grade').update({r_id: req.body.id}, {
+			$set: {
+			    "rname": req.body.name
+			}
+			});	
+	}); 
+	res.redirect('/')
+        return;
+    }
+    	MongoClient.connect(mongourl,function(err,db) {
+     	 console.log('Connected to mlab.com');
+      	assert.equal(null,err);
+     	 update(db, req.files.sampleFile,req.body, function(result) {
+       	 db.close();
+       	 res.redirect('/');
+     	 });
+    	});
 });
+
+function update(db,bfile,rrr,callback) {
+  console.log(bfile);
+ db.collection('restaurant').update({_id: ObjectId(rrr.id)}, {
+			$set: {
+			    "name": rrr.name,
+			    "borough": rrr.borough,
+			    "cuisine": rrr.cuisine,
+			    "street": rrr.street,
+			    "building": rrr.building,
+			    "zipcode": rrr.zipcode,
+			    "gps1": rrr.gps1,
+			    "gps2": rrr.gps2,
+			    "photo" : new Buffer(bfile.data).toString('base64'),
+			    "photo mimetype" : bfile.mimetype
+			}	  
+	  
+  }, function(err,result) {
+    callback(result);
+  });
+	db.collection('grade').update({r_id: rrr.id}, {
+			$set: {
+			    "rname": rrr.name
+			}
+			});
+}
+
 
 app.get('/remove',function(req,res) {
 	console.log(req.session);
