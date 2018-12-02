@@ -37,19 +37,7 @@
   }
 </style>
 <BODY>
-<script>
-var image = new Image();
-image.src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" ;
-image.onload = function() {
-    // image exists and is loaded
-    document.body.appendChild(image);
-}
-image.onerror = function() {
-    // image did not load
-    var err = new Image();
-    document.body.appendChild(err);
-}
-</script>
+
 <H2><%= r.name %></H2>
 <div class="w3-container">
 <p>
@@ -85,6 +73,18 @@ image.onerror = function() {
         <button class="btn btn-default">Home</button>
       </a>
     
- 
+ <script>
+var image = new Image();
+image.src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" ;
+image.onload = function() {
+    // image exists and is loaded
+    document.body.appendChild(image);
+}
+image.onerror = function() {
+    // image did not load
+    var err = new Image();
+    document.body.appendChild(err);
+}
+</script>
 </BODY>
 </HTML>
