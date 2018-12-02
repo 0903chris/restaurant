@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Restaurant</title>
+  <title>Update</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -35,20 +35,23 @@
 </style>
 
    <body>
-   
-  <form action="/update" method="post">
-  <input type="hidden" name="id" value=<%= r._id %>>
-    Name: <input type="text" name="name" value=<%= r.name %>><br>
-    borough: <input type="text" name="borough" value=<%= r.borough %>><br>
-    cuisine: <input type="text" name="cuisine" value=<%= r.cuisine %>><br>
-    street: <input type="text" name="street"value=<%= r.street %>><br>
-    building: <input type="text" name="building"value=<%= r.building %>><br>
-    zipcode: <input type="text" name="zipcode"value=<%= r.zipcode %>><br>
-    GPS Coordinates (lon.): <input type="text" name="gps1"value=<%= r.gps1 %>><br>
-    GPS Coordinates (lat.) <input type="text" name="gps2"value=<%= r.gps2 %>><br>
+   	<form ref='uploadForm'
+            id='uploadForm'
+            action='/update'
+            method='post'
+            encType="multipart/form-data">
+  	<input type="hidden" name="id" value=<%= r._id %>>
+   	 Name: <input type="text" name="name" value=<%= r.name %>><br>
+    	 Borough: <input type="text" name="borough" value=<%= r.borough %>><br>
+    	 Cuisine: <input type="text" name="cuisine" value=<%= r.cuisine %>><br>
+    	 Street: <input type="text" name="street"value=<%= r.street %>><br>
+    	 Building: <input type="text" name="building"value=<%= r.building %>><br>
+    	 Zipcode: <input type="text" name="zipcode"value=<%= r.zipcode %>><br>
+    	 Coordinates (lon.): <input type="text" name="gps1"value=<%= r.longtitude %>><br>
+    	 Coordinates (lat.) <input type="text" name="gps2"value=<%= r.latitude %>><br>
+    	 Photo: <input type="file" name="sampleFile"><br>
     
-    
-	<input type="submit" value="update">
+	<input type="submit" value="Edit">
   
 	</form>
    </body>
