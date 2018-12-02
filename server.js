@@ -158,7 +158,25 @@ app.get('/create',function(req,res) {
 		res.render('create',{name:req.session.username});
 	}
 });
-
+app.post('/create',function(req,res) {
+	MongoClient.connect(mongourl, function(err,db){
+		assert.equal(err,null);
+		db.collection('restaurant').insertOne({
+			"name":req.body.name,
+			"borough":req.body.borough,
+			"cuisine":req.body.cuisine,
+			"photo":req.body.photo,
+			"photomimetype":req.body.photomimetype,
+			"street":req.body.street,
+			"building":req.body.building,
+			"zipcode":req.body.zipcode,
+			"longtitude":req.body.gps1,
+			"latitude":req.body.gps2,
+			"owner":req.session.username
+			  });
+		});
+res.redirect('/');
+});
 app.get('/gps', function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
