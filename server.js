@@ -144,7 +144,7 @@ app.post('/upload', function(req, res) {
 		"owner":req.session.username
 	});
 	});
-	res.redirect('/')
+	res.redirect('/details')
 	return;
     }
 	
