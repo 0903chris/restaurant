@@ -38,7 +38,7 @@
 </style>
 <BODY>
 <script>
-if(<%= r.photo %>!=null)
+if(<%= r.photo %>!=" ")
 <img src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" />
 </script>
 <H2><%= r.name %></H2>
