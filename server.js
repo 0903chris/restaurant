@@ -142,9 +142,11 @@ app.post('/upload', function(req, res) {
 		"longtitude":req.body.gps1,
 		"latitude":req.body.gps2,
 		"owner":req.session.username
+		
 	});
+		res.render('details',{name:req.body.name});
 	});
-	res.redirect('/details')
+	res.redirect('/')
 	return;
     }
 	
@@ -180,7 +182,9 @@ app.post('/create',function(req,res) {
 			"longtitude":req.body.gps1,
 			"latitude":req.body.gps2,
 			"owner":req.session.username
+			
 			  });
+		
 		});
 res.redirect('/');
 });
