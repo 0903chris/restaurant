@@ -48,14 +48,15 @@
         <button class="btn btn-default">All restaurants</button>
       </a>
     </div>
+    <form action="/read" method="post">
+       <input type="text" name="search">
+       <input type="submit" value="search">
+   </form>
     <ol>
   <% r.forEach(function(rest) { %>
   <li><a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a></li>
   <% });                        %>
 </ol>
-   <form action="/read" method="post">
-       <input type="text" name="search">
-       <input type="submit" value="search">
-   </form>
+   
    </body>
 </html>
