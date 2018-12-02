@@ -411,22 +411,27 @@ app.get('/rate',function(req,res) {
 app.post('/rate',function(req,res) {
 	MongoClient.connect(mongourl, function(err, db) {
 		assert.equal(err,null);
-		db.collection('grade').find().toArray(function(err,mark){
-			for (i in mark) {
-		if (mark[i].r_id != req.body.id) {
-			
-			db.collection('grade').insertOne({
+		db.collection("grade").find().toArray(function(err,items){
+			var item = null;
+			for (i in items) {
+				if (items[i].user == req.session.username) {
+					if (items[i].r_id == req.body.id) {
+						item = items[i]
+						break;
+					}
+				}
+			}
+			if (!item) {
+				db.collection('grade').insertOne({
 					"r_id": req.body.id,
 					"rname": req.body.name,
 			    		"user": req.session.username,     
 			    		"score": req.body.score
-			});
-			res.redirect('/');
-			
-		} else {
-			res.render('rateError');
-		}
-			}
+				});
+					res.redirect('/');
+				} else {
+					res.render('rateError');
+				}
 		});
 	});
 });
