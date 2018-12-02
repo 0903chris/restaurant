@@ -144,7 +144,6 @@ app.post('/upload', function(req, res) {
 		"owner":req.session.username
 		
 	});
-		res.render('details',{name:req.body.name});
 	});
 	res.redirect('/')
 	return;
@@ -186,7 +185,7 @@ app.post('/create',function(req,res) {
 			  });
 		
 		});
-res.redirect('/');
+res.redirect('/showdetails');
 });
 app.get('/gps', function(req,res) {
 	console.log(req.session);
