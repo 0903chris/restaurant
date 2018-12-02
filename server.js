@@ -143,9 +143,9 @@ app.post('/upload', function(req, res) {
 		"latitude":req.body.gps2,
 		"owner":req.session.username
 	});
-		res.render('showdetails',{name:req.body.name,id:req.body.id});
+		
 	});
-	
+	res.redirect('/');
 	return;
     }
 	
