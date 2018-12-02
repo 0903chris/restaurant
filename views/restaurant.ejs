@@ -54,7 +54,7 @@
    </form>
     <ol>
   <% r.forEach(function(rest) { %>
-  <a style="text-align:center;href=/showdetails?id=<%= rest._id %>><%= rest.name %></a><br>
+  <p style="text-align:center;"><a href=/showdetails?id=<%= rest._id %>><%= rest.name %></a><br></p>
   <% });                        %>
 </ol>
    
