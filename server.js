@@ -418,7 +418,7 @@ app.post('/rate',function(req,res) {
 			    		"user": req.session.username,     
 			    		"score": req.body.score
 				});
-					res.redirect('/showdetails?id=<%= rest._id %>');
+					res.redirect('/');
 				} else {
 					res.render('rateError');
 				}
