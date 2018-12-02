@@ -310,7 +310,7 @@ app.post('/update', function(req, res) {
 			}
 			});	
 	}); 
-	res.redirect('/')
+	res.redirect('/');
         return;
     }
     	MongoClient.connect(mongourl,function(err,db) {
