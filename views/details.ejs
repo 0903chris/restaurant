@@ -46,13 +46,9 @@ image.onload = function() {
 }
 image.onerror = function() {
     // image did not load
-
     var err = new Image();
-    err.src = ' ';
-
     document.body.appendChild(err);
 }
-
 </script>
 <H2><%= r.name %></H2>
 <div class="w3-container">
