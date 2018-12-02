@@ -39,7 +39,7 @@
 <BODY>
 <script>
 var image = new Image();
-
+image.src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" ;
 image.onload = function() {
     // image exists and is loaded
     document.body.appendChild(image);
@@ -52,7 +52,7 @@ image.onerror = function() {
 
     document.body.appendChild(err);
 }
-image.src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" ;
+
 </script>
 <H2><%= r.name %></H2>
 <div class="w3-container">
