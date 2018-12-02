@@ -51,8 +51,8 @@
   <li><%= grade.score %> (<%= grade.user %>)</li>
   <% });                        %>
 </ol>
-<p>owner: <%= r.owner %></p>
-<div class="row">
+<p>Owner: <%= r.owner %></p>
+
       <a href="/edit?id=<%= r._id %>">
         <button class="btn btn-default">Edit</button>        
       </a>
@@ -65,7 +65,7 @@
        <a href="/read">
         <button class="btn btn-default">Home</button>
       </a>
-    </div>
+    
     <a href="/gps?id=<%= r._id %>">Google Map</a>
 </BODY>
 </HTML>
