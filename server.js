@@ -225,18 +225,26 @@ app.get('/showdetails', function(req,res) {
 		assert.equal(err,null);
         	db.collection("restaurant").find().toArray(function(err,items){
 		var item = null;
-		var rest = null;
-		var rn = null;
 		if (req.query.id) {
 		for (i in items) {
 			if (items[i]._id == req.query.id) {
 				item = items[i];
-				rn = items[i].name;
 				break;
 			}
 		}
+		
+		if (!items[i].photo) {	
+			
+			
+			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+				
+					res.render('detailsnophoto', {r: items[i], g: rnames});
+					
+			});
+		} 
+		
 		if (item) {
-			db.collection("grade").find({rname: rn}).toArray(function(err,rnames){
+			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
 					res.render('details', {r: items[i], g: rnames});
 			});
 		} else {
