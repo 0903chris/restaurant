@@ -1,0 +1,67 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Details</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style type="text/css">
+  .well {
+      background: none;
+      height: 320px;
+  }
+  .table-scroll tbody {
+      position: absolute;
+      overflow-y: scroll;
+      height: 250px;
+  }
+  .table-scroll tr {
+      width: 100%;
+      table-layout: fixed;
+      display: inline-table;
+  }
+  .table-scroll thead > tr > th {
+      border: none;
+  }
+</style>
+<BODY>
+<H2><%= r.name %></H2>
+<p>Borough: <%= r.borough %></p>
+<p>Cuisine: <%= r.cuisine %></p>
+<p>Street: <%= r.street %></p>
+<p>Building: <%= r.building %></p>
+<p>Zipcode: <%= r.zipcode %></p>
+<p>GPS: <%= r.gps1 %>, <%= r.gps2 %> </p>
+<p>Rating:</p>
+ <ol>
+  <% g.forEach(function(grade) { %>
+  <li><%= grade.score %> (<%= grade.user %>)</li>
+  <% });                        %>
+</ol>
+<p>owner: <%= r.owner %></p>
+<div class="row">
+      <a href="/edit?id=<%= r._id %>">
+        <button class="btn btn-default">Edit</button>        
+      </a>
+      <a href="/remove?id=<%= r._id %>">
+        <button class="btn btn-default">Delete</button>        
+      </a>
+      <a href="/rate?id=<%= r._id %>">
+        <button class="btn btn-default">Rate</button>        
+      </a>
+       <a href="/read">
+        <button class="btn btn-default">Go back</button>
+      </a>
+    </div>
+    <a href="/gps?id=<%= r._id %>">Google Map</a>
+</BODY>
+</HTML>
