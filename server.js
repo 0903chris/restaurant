@@ -132,7 +132,7 @@ app.post('/upload', function(req, res) {
      if (!req.files.sampleFile) {
         MongoClient.connect(mongourl,function(err,db) {
       	assert.equal(null,err);
-	db.collection('restaurants').insertOne({
+	db.collection('restaurant').insertOne({
 		"name":req.body.name,
 		"borough": req.body.borough,
 		"cuisine": req.body.cuisine,
