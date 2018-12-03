@@ -18,7 +18,8 @@ var SECRETKEY2 = 'Restaurant';
 
 var users = new Array(
 	{name: 'demo', password: ''},
-	{name: 'guest', password: 'guest'}
+	{name: 'guest', password: 'guest'},
+	{name: 'student', password: ''}
 );
 app.use(session({
   name: 'session',
