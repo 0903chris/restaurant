@@ -266,24 +266,40 @@ app.get('/edit',function(req,res) {
 					break;
 				}
 			}	     
-			if (item) {
-				if(req.session.username == owner) {
-					res.render('update', {r: items[i]});
-				} else {
-					res.render('updateError');
-				}
-			} else {
-				res.status(500).end(req.query.id + ' not found!');
-			}
-		
-	} else {
-		res.status(500).end('id missing!');
-	}
-				    
+			if (!items[i].photo) {	
+			
+			
+			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+				
+					res.render('detailsnophoto', {r: items[i], g: rnames});
+					
+			});
+		} 
+		/*if (!items[i].gps1) {
+			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('detailsnomap', {r: items[i], g: rnames});
+			});
+		}
+		if (!items[i].gps2) {
+			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('detailsnomap', {r: items[i], g: rnames});
+			});
+		}*/
+		if (item) {
+			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('details', {r: items[i], g: rnames});
+			});
+		} else {
+			res.status(500).end(req.query.id + ' not found!');
+		}
+		} else {
+			res.status(500).end('id missing!');
+		}
 			});
 		});
 	}
 });
+
 
 app.post('/update', function(req, res) {
     var sampleFile;
