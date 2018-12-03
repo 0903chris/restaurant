@@ -288,7 +288,10 @@ app.get('/edit',function(req,res) {
 	} else {
 		res.status(500).end('id missing!');
 	}
-
+	});
+		});
+	}
+});
 
 app.post('/update', function(req, res) {
     var sampleFile;
