@@ -227,18 +227,18 @@ app.post('/update', function(req, res) {
     	});
 });
 
-function update(db,bfile,rrr,callback) {
+function update(db,bfile,x,callback) {
   console.log(bfile);
  db.collection('restaurant').update({_id: ObjectId(rrr.id)}, {
 			$set: {
-			    "name": rrr.name,
-			    "borough": rrr.borough,
-			    "cuisine": rrr.cuisine,
-			    "street": rrr.street,
-			    "building": rrr.building,
-			    "zipcode": rrr.zipcode,
-			    "longtitude": rrr.gps1,
-			    "latitude": rrr.gps2,
+			    "name": x.name,
+			    "borough": x.borough,
+			    "cuisine": x.cuisine,
+			    "street": x.street,
+			    "building": x.building,
+			    "zipcode": x.zipcode,
+			    "longtitude": x.gps1,
+			    "latitude": x.gps2,
 			    "photo" : new Buffer(bfile.data).toString('base64'),
 			    "photomimetype" : bfile.mimetype
 			}	  
@@ -246,9 +246,9 @@ function update(db,bfile,rrr,callback) {
   }, function(err,result) {
     callback(result);
   });
-	db.collection('grade').update({r_id: rrr.id}, {
+	db.collection('grade').update({r_id: x.id}, {
 			$set: {
-			    "rname": rrr.name
+			    "rname": x.name
 			}
 			});
 }
@@ -370,17 +370,17 @@ app.get('/showdetails', function(req,res) {
 		if ((items[i].photomimetype == "application/pdf") && (!items[i].longtitude) || 
 		    (items[i].photomimetype == "application/pdf") && (!items[i].latitude)) {
 			db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-				res.render('detailsnophotonomap', {r: items[i], g: rnames});
+				res.render('nomapphoto', {r: items[i], g: rnames});
 			});
 		} 
 		if (!items[i].photo) {
 			if ((!items[i].longtitude) || (!items[i].latitude)) {
 				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-					res.render('detailsnophotonomap', {r: items[i], g: rnames});
+					res.render('nomapphoto', {r: items[i], g: rnames});
 				});
 			} else {
 				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-					res.render('detailsnophoto', {r: items[i], g: rnames});
+					res.render('nophoto', {r: items[i], g: rnames});
 				});
 			}
 		} 
