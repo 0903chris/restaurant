@@ -1,32 +1,34 @@
 var http = require('http');
+var url  = require('url');
 var express = require('express');
 var session = require('cookie-session');
-var url  = require('url');
 var bodyParser = require('body-parser');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+var ObjectId = require('mongodb').ObjectID;
 var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
-var assert= require('assert');
-var ObjectId=require('mongodb').ObjectID;
 var formidable = require('formidable');
- 
-app = express();
-app.set('view engine','ejs');
+var fileUpload = require('express-fileupload');
 
-var SECRETKEY1 = 'COMPS381F mini project';
-var SECRETKEY2 = 'Restaurant';
+var SECRETKEY1 = 'COMPS381F';
+var SECRETKEY2 = 'mini project';
 
 var users = new Array(
 	{name: 'demo', password: ''},
-	{name: 'guest', password: 'guest'},
 	{name: 'student', password: ''}
 );
+
+app.set('view engine','ejs');
+
 app.use(session({
   name: 'session',
   keys: [SECRETKEY1,SECRETKEY2]
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(fileUpload());   
 
 app.get('/',function(req,res) {
 	console.log(req.session);
@@ -36,6 +38,7 @@ app.get('/',function(req,res) {
 		res.redirect('/read');;
 	}
 });
+
 app.get('/read',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -50,31 +53,9 @@ app.get('/read',function(req,res) {
         	});									
 	}
 });
-app.post('/read',function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurant").find({$or:[
-			{name:req.body.search}, 
-			{borough:req.body.search}, 
-			{cuisine:req.body.search}, 
-			{street:req.body.search}, 
-		 	{building:req.body.search}, 
-			{zipcode:req.body.search}, 
-			{gps1:req.body.search}, 
-			{gps2:req.body.search}, 
-			{owner:req.body.search}]}).toArray(function(err,items){
-				res.render('restaurant',{name:req.session.username, r:items});
-			});
-        	});									
-	}
-});
+
 app.get('/login',function(req,res) {
-	res.sendFile(__dirname + '/public/login.html');
+	res.render('login');
 });
 
 app.post('/login',function(req,res) {
@@ -85,51 +66,22 @@ app.post('/login',function(req,res) {
 			req.session.username = users[i].name;
 		}
 	}
-	res.redirect('/');
+		res.redirect('/');
 });
 
 app.get('/logout',function(req,res) {
 	req.session = null;
 	res.redirect('/');
 });
-var express = require('express');
-var fileUpload = require('express-fileupload');
 
-app.use(fileUpload());   
+app.get('/create',function(req,res) {
+		res.status(200);
+		res.render('create',{name:req.session.username});
+});
 
-
-
-
-function create(db,bfile,rb,rs,callback) {
-  console.log(bfile);
-  db.collection('restaurant').insertOne({
-	"name":rb.name,
-	"borough": rb.borough,
-	"cuisine": rb.cuisine,
-	"street":rb.street,
-	"building":rb.building,
-	"zipcode":rb.zipcode,
-	"longtitude":rb.gps1,
-	"latitude":rb.gps2,
-	"photo" : new Buffer(bfile.data).toString('base64'),
-	"photo mimetype" : bfile.mimetype,
-	"owner":rs.username
-	
-	  
-	  
-  }, function(err,result) {
-    if (err) {
-      console.log('insertOne Error: ' + JSON.stringify(err));
-      result = err;
-    } else {
-      console.log("Inserted _id = " + result.insertId);
-    }
-    callback(result);
-  });
-}
 app.post('/upload', function(req, res) {
-    var sampleFile;
-    
+    var sampleFile;	
+	
      if (!req.files.sampleFile) {
         MongoClient.connect(mongourl,function(err,db) {
       	assert.equal(null,err);
@@ -140,81 +92,44 @@ app.post('/upload', function(req, res) {
 		"street":req.body.street,
 		"building":req.body.building,
 		"zipcode":req.body.zipcode,
-		"gps1":req.body.gps1,
-		"gps2":req.body.gps2,
+		"longtitude":req.body.gps1,
+		"latitude":req.body.gps2,
 		"owner":req.session.username
 	});
 	});
-	res.redirect('/')
+	res.redirect('/');
 	return;
-    }
+     }
 	
     MongoClient.connect(mongourl,function(err,db) {
       assert.equal(null,err);
       create(db, req.files.sampleFile,req.body,req.session, function(result) {
         db.close();
-        res.redirect('/')
+        res.redirect('/');
+	return;
       });
     });
 });
 
-app.get('/create',function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} else {
-		res.status(200);
-		res.render('create',{name:req.session.username});
-	}
-});
-app.post('/create',function(req,res) {
-	MongoClient.connect(mongourl, function(err,db){
-		assert.equal(err,null);
-		db.collection('restaurant').insertOne({
-			"name":req.body.name,
-			"borough":req.body.borough,
-			"cuisine":req.body.cuisine,
-			"photo":req.body.photo,
-			"photomimetype":req.body.photomimetype,
-			"street":req.body.street,
-			"building":req.body.building,
-			"zipcode":req.body.zipcode,
-			"longtitude":req.body.gps1,
-			"latitude":req.body.gps2,
-			"owner":req.session.username
-			  });
-		});
-res.redirect('/');
-});
-app.get('/gps', function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurant").find().toArray(function(err,items){
-		var item = null;
-		if (req.query.id) {
-		for (i in items) {
-			if (items[i]._id == req.query.id) {
-				item = items[i]
-				break;
-			}
-		}
-		if (item) {
-			res.render('gps', {r: items[i]});							
-		} else {
-			res.status(500).end(req.query.id + ' not found!');
-		}
-	} else {
-		res.status(500).end('id missing!');
-	}
-			});
-		});
-	}
-});
+function create(db,bfile,rrr,sss,callback) {
+  db.collection('restaurant').insertOne({
+	"name":rrr.name,
+	"borough": rrr.borough,
+	"cuisine": rrr.cuisine,
+	"street":rrr.street,
+	"building":rrr.building,
+	"zipcode":rrr.zipcode,
+	"longtitude":rrr.gps1,
+	"latitude":rrr.gps2,
+	"owner":sss.username,
+	"photo" : new Buffer(bfile.data).toString('base64'),
+	"photomimetype" : bfile.mimetype	  
+	  
+  }, function(err,result) {
+    callback(result);
+  });
+}
+
 app.get('/showdetails', function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -232,24 +147,27 @@ app.get('/showdetails', function(req,res) {
 				break;
 			}
 		}
-		
-		if (!items[i].photo) {	
-			
-			
-			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
-				
-					res.render('detailsnophoto', {r: items[i], g: rnames});
-					
+		if ((items[i].photo_mimetype == "application/pdf") && (!items[i].gps1) || 
+		    (items[i].photo_mimetype == "application/pdf") && (!items[i].gps2)) {
+			db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
+				res.render('detailsnophotonomap', {r: items[i], g: rnames});
 			});
 		} 
-		
-		if (item) {
-			db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
-					res.render('details', {r: items[i], g: rnames});
-			});
-		} else {
-			res.status(500).end(req.query.id + ' not found!');
-		}
+		if (!items[i].photo) {
+			if ((!items[i].gps1) || (!items[i].gps2)) {
+				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('detailsnophotonomap', {r: items[i], g: rnames});
+				});
+			} else {
+				db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('detailsnophoto', {r: items[i], g: rnames});
+				});
+			}
+		} 
+		db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+			db.close();
+			res.render('details', {r: items[i], g: rnames});			
+		});
 		} else {
 			res.status(500).end('id missing!');
 		}
@@ -257,6 +175,7 @@ app.get('/showdetails', function(req,res) {
 		});
 	}
 });
+
 app.get('/edit',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -288,7 +207,8 @@ app.get('/edit',function(req,res) {
 	} else {
 		res.status(500).end('id missing!');
 	}
-	});
+				    
+			});
 		});
 	}
 });
@@ -316,7 +236,7 @@ app.post('/update', function(req, res) {
 			}
 			});	
 	}); 
-	res.render('updateok')
+	res.redirect('/')
         return;
     }
     	MongoClient.connect(mongourl,function(err,db) {
@@ -329,32 +249,31 @@ app.post('/update', function(req, res) {
     	});
 });
 
-function update(db,bfile,x,callback) {
+function update(db,bfile,rrr,callback) {
   console.log(bfile);
- db.collection('restaurant').update({_id: ObjectId(x.id)}, {
+ db.collection('restaurant').update({_id: ObjectId(rrr.id)}, {
 			$set: {
-			    "name": x.name,
-			    "borough": x.borough,
-			    "cuisine": x.cuisine,
-			    "street": x.street,
-			    "building": x.building,
-			    "zipcode": x.zipcode,
-			    "longtitude": x.gps1,
-			    "latitude": x.gps2,
+			    "name": rrr.name,
+			    "borough": rrr.borough,
+			    "cuisine": rrr.cuisine,
+			    "street": rrr.street,
+			    "building": rrr.building,
+			    "zipcode": rrr.zipcode,
+			    "longtitude": rrr.gps1,
+			    "latitude": rrr.gps2,
 			    "photo" : new Buffer(bfile.data).toString('base64'),
-			    "photo mimetype" : bfile.mimetype
+			    "photomimetype" : bfile.mimetype
 			}	  
 	  
   }, function(err,result) {
     callback(result);
   });
-	db.collection('grade').update({r_id: x.id}, {
+	db.collection('grade').update({r_id: rrr.id}, {
 			$set: {
-			    "rname": x.name
+			    "rname": rrr.name
 			}
 			});
 }
-
 
 app.get('/remove',function(req,res) {
 	console.log(req.session);
@@ -394,6 +313,31 @@ app.get('/remove',function(req,res) {
 		});
 	}
 });
+
+app.post('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find({$or:[
+			{name:req.body.search}, 
+			{borough:req.body.search}, 
+			{cuisine:req.body.search}, 
+			{street:req.body.search}, 
+		 	{building:req.body.search}, 
+			{zipcode:req.body.search}, 
+			{longtitude:req.body.search}, 
+			{latitude:req.body.search}, 
+			{owner:req.body.search}]}).toArray(function(err,items){
+				res.render('restaurant',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
+
 app.get('/rate',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -450,6 +394,144 @@ app.post('/rate',function(req,res) {
 				}
 		});
 	});
+});
+
+app.get('/gps', function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		var item = null;
+		if (req.query.id) {
+		for (i in items) {
+			if (items[i]._id == req.query.id) {
+				item = items[i]
+				break;
+			}
+		}
+		if (item) {
+			res.render('gps', {r: items[i]});							
+		} else {
+			res.status(500).end(req.query.id + ' not found!');
+		}
+	} else {
+		res.status(500).end('id missing!');
+	}
+			});
+		});
+	}
+});
+
+app.get('/api/restaurant',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find().toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.post('/api/restaurant',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").insert({
+			"name": req.body.name,
+                        "borough":req.body.borough, 
+			"cuisine":req.body.cuisine, 
+			"street":req.body.street, 
+		 	"building":req.body.building, 
+			"zipcode":req.body.zipcode, 
+			"longtitude":req.body.gps1, 
+			"latitude":req.body.gps2, 
+			"owner": req.body.user
+		});
+		res.status(200).end('success!');
+	});
+});
+
+app.get('/api/restaurant/name/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({name: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/borough/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({borough: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/cuisine/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({cuisine: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/street/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({street: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/building/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({building: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/zipcode/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({zipcode: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/gps1/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({gps1: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/gps2/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({gps2: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
+});
+
+app.get('/api/restaurant/owner/:search',function(req,res){ 
+	MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+ 		db.collection("restaurant").find({owner: req.params.search}).toArray(function(err,items){
+			res.status(200).json(items).end();
+		});
+	});	
 });
 
 app.listen(process.env.PORT || 8099);
