@@ -35,19 +35,27 @@
 </style>
 <BODY>
 <H2><%= r.name %></H2>
-<p>Borough: <%= r.borough %></p>
-<p>Cuisine: <%= r.cuisine %></p>
-<p>Street: <%= r.street %></p>
-<p>Building: <%= r.building %></p>
-<p>Zipcode: <%= r.zipcode %></p>
-<p>Coordinate: <%= r.longtitude %>, <%= r.latitude %> </p>
-<p>Rating:</p>
- <ol>
+<div class="w3-container">
+<p>
+<label class="w3-label w3-validate">Borough: </label> <%= r.borough %></p>
+<label class="w3-label w3-validate">Cuisine: </label> <%= r.cuisine %></p>
+<label class="w3-label w3-validate">Street: </label> <%= r.street %></p>
+<label class="w3-label w3-validate">Building: </label> <%= r.building %></p>
+<label class="w3-label w3-validate">Zipcode: </label> <%= r.zipcode %></p>
+<label class="w3-label w3-validate">Coordinate: </label> <%= r.longtitude %>, <%= r.latitude %></p>
+<label class="w3-label w3-validate">Rating: </label></p>
+
+  <ol>
   <% g.forEach(function(grade) { %>
   <li><%= grade.score %> (<%= grade.user %>)</li>
   <% });                        %>
 </ol>
+
+<p>
+<label class="w3-label w3-validate">Owner: </label><%= r.owner %></p>
 <p>owner: <%= r.owner %></p>
+<a href="/gps?id=<%= r._id %>">Google Map</a>
+<p>
 
       <a href="/edit?id=<%= r._id %>">
         <button class="btn btn-default">Edit</button>        
@@ -61,7 +69,8 @@
        <a href="/read">
         <button class="btn btn-default">Home</button>
       </a>
+      </p>
     </div>
-    <a href="/gps?id=<%= r._id %>">Google Map</a>
+  
 </BODY>
 </HTML>
