@@ -10,10 +10,8 @@ var ObjectId = require('mongodb').ObjectID;
 var mongourl ="mongodb://df:df9999@ds149672.mlab.com:49672/chrison9";
 var formidable = require('formidable');
 var fileUpload = require('express-fileupload');
-
 var SECRETKEY1 = 'COMPS381F';
 var SECRETKEY2 = 'mini project';
-
 var users = new Array(
 	{name: 'demo', password: ''},
 	{name: 'student', password: ''}
@@ -25,7 +23,9 @@ app.use(session({
   name: 'session',
   keys: [SECRETKEY1,SECRETKEY2]
 }));
+
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
 app.use(fileUpload());   
@@ -36,21 +36,6 @@ app.get('/',function(req,res) {
 		res.redirect('/login');
 	} else {
 		res.redirect('/read');;
-	}
-});
-
-app.get('/read',function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurant").find().toArray(function(err,items){
-		res.render('restaurant',{name:req.session.username, r:items});
-			});
-        	});									
 	}
 });
 
@@ -74,10 +59,68 @@ app.get('/logout',function(req,res) {
 	res.redirect('/');
 });
 
+app.get('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		res.render('restaurant',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
+
+app.post('/read',function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find({$or:[
+			{name:req.body.search}, 
+			{borough:req.body.search}, 
+			{cuisine:req.body.search}, 
+			{street:req.body.search}, 
+		 	{building:req.body.search}, 
+			{zipcode:req.body.search}, 
+			{longtitude:req.body.search}, 
+			{latitude:req.body.search}, 
+			{owner:req.body.search}]}).toArray(function(err,items){
+				res.render('restaurant',{name:req.session.username, r:items});
+			});
+        	});									
+	}
+});
+
 app.get('/create',function(req,res) {
 		res.status(200);
 		res.render('create',{name:req.session.username});
 });
+
+function create(db,bfile,rb,rs,callback) {
+  db.collection('restaurant').insertOne({
+	"name":rb.name,
+	"borough": rb.borough,
+	"cuisine": rb.cuisine,
+	"street":rb.street,
+	"building":rb.building,
+	"zipcode":rb.zipcode,
+	"longtitude":rb.gps1,
+	"latitude":rb.gps2,
+	"owner":rs.username,
+	"photo" : new Buffer(bfile.data).toString('base64'),
+	"photomimetype" : bfile.mimetype	  
+	  
+  }, function(err,result) {
+    callback(result);
+  });
+}
 
 app.post('/upload', function(req, res) {
     var sampleFile;	
@@ -109,71 +152,6 @@ app.post('/upload', function(req, res) {
 	return;
       });
     });
-});
-
-function create(db,bfile,rrr,sss,callback) {
-  db.collection('restaurant').insertOne({
-	"name":rrr.name,
-	"borough": rrr.borough,
-	"cuisine": rrr.cuisine,
-	"street":rrr.street,
-	"building":rrr.building,
-	"zipcode":rrr.zipcode,
-	"longtitude":rrr.gps1,
-	"latitude":rrr.gps2,
-	"owner":sss.username,
-	"photo" : new Buffer(bfile.data).toString('base64'),
-	"photomimetype" : bfile.mimetype	  
-	  
-  }, function(err,result) {
-    callback(result);
-  });
-}
-
-app.get('/showdetails', function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurant").find().toArray(function(err,items){
-		var item = null;
-		if (req.query.id) {
-		for (i in items) {
-			if (items[i]._id == req.query.id) {
-				item = items[i];
-				break;
-			}
-		}
-		if ((items[i].photomimetype == "application/pdf") && (!items[i].longtitude) || 
-		    (items[i].photomimetype == "application/pdf") && (!items[i].latitude)) {
-			db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-				res.render('detailsnophotonomap', {r: items[i], g: rnames});
-			});
-		} 
-		if (!items[i].photo) {
-			if ((!items[i].longtitude) || (!items[i].latitude)) {
-				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-					res.render('detailsnophotonomap', {r: items[i], g: rnames});
-				});
-			} else {
-				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-					res.render('detailsnophoto', {r: items[i], g: rnames});
-				});
-			}
-		} 
-		db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
-			db.close();
-			res.render('details', {r: items[i], g: rnames});			
-		});
-		} else {
-			res.status(500).end('id missing!');
-		}
-			});
-		});
-	}
 });
 
 app.get('/edit',function(req,res) {
@@ -314,30 +292,6 @@ app.get('/remove',function(req,res) {
 	}
 });
 
-app.post('/read',function(req,res) {
-	console.log(req.session);
-	if (!req.session.authenticated) {
-		res.redirect('/login');
-	} 
-	else {
-		MongoClient.connect(mongourl, function(err, db) {
-		assert.equal(err,null);
-        	db.collection("restaurant").find({$or:[
-			{name:req.body.search}, 
-			{borough:req.body.search}, 
-			{cuisine:req.body.search}, 
-			{street:req.body.search}, 
-		 	{building:req.body.search}, 
-			{zipcode:req.body.search}, 
-			{longtitude:req.body.search}, 
-			{latitude:req.body.search}, 
-			{owner:req.body.search}]}).toArray(function(err,items){
-				res.render('restaurant',{name:req.session.username, r:items});
-			});
-        	});									
-	}
-});
-
 app.get('/rate',function(req,res) {
 	console.log(req.session);
 	if (!req.session.authenticated) {
@@ -394,6 +348,52 @@ app.post('/rate',function(req,res) {
 				}
 		});
 	});
+});
+
+app.get('/showdetails', function(req,res) {
+	console.log(req.session);
+	if (!req.session.authenticated) {
+		res.redirect('/login');
+	} 
+	else {
+		MongoClient.connect(mongourl, function(err, db) {
+		assert.equal(err,null);
+        	db.collection("restaurant").find().toArray(function(err,items){
+		var item = null;
+		if (req.query.id) {
+		for (i in items) {
+			if (items[i]._id == req.query.id) {
+				item = items[i];
+				break;
+			}
+		}
+		if ((items[i].photomimetype != "application/jpg") && (!items[i].longtitude) || 
+		    (items[i].photomimetype != "application/jpg") && (!items[i].latitude)) {
+			db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
+				res.render('detailsnophotonomap', {r: items[i], g: rnames});
+			});
+		} 
+		if (!items[i].photo) {
+			if ((!items[i].longtitude) || (!items[i].latitude)) {
+				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('detailsnophotonomap', {r: items[i], g: rnames});
+				});
+			} else {
+				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
+					res.render('detailsnophoto', {r: items[i], g: rnames});
+				});
+			}
+		} 
+		db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
+			db.close();
+			res.render('details', {r: items[i], g: rnames});			
+		});
+		} else {
+			res.status(500).end('id missing!');
+		}
+			});
+		});
+	}
 });
 
 app.get('/gps', function(req,res) {
