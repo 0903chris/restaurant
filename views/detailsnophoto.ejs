@@ -40,7 +40,7 @@
 <p>Street: <%= r.street %></p>
 <p>Building: <%= r.building %></p>
 <p>Zipcode: <%= r.zipcode %></p>
-<p>GPS: <%= r.gps1 %>, <%= r.gps2 %> </p>
+<p>Coordinate: <%= r.longtitude %>, <%= r.latitude %> </p>
 <p>Rating:</p>
  <ol>
   <% g.forEach(function(grade) { %>
@@ -48,7 +48,7 @@
   <% });                        %>
 </ol>
 <p>owner: <%= r.owner %></p>
-<div class="row">
+
       <a href="/edit?id=<%= r._id %>">
         <button class="btn btn-default">Edit</button>        
       </a>
@@ -59,7 +59,7 @@
         <button class="btn btn-default">Rate</button>        
       </a>
        <a href="/read">
-        <button class="btn btn-default">Go back</button>
+        <button class="btn btn-default">Home</button>
       </a>
     </div>
     <a href="/gps?id=<%= r._id %>">Google Map</a>
