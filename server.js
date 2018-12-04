@@ -147,24 +147,24 @@ app.get('/showdetails', function(req,res) {
 				break;
 			}
 		}
-		if ((items[i].photo_mimetype == "application/pdf") && (!items[i].gps1) || 
-		    (items[i].photo_mimetype == "application/pdf") && (!items[i].gps2)) {
+		if ((items[i].photomimetype == "application/pdf") && (!items[i].longtitude) || 
+		    (items[i].photomimetype == "application/pdf") && (!items[i].latitude)) {
 			db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
 				res.render('detailsnophotonomap', {r: items[i], g: rnames});
 			});
 		} 
 		if (!items[i].photo) {
-			if ((!items[i].gps1) || (!items[i].gps2)) {
+			if ((!items[i].longtitude) || (!items[i].latitude)) {
 				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
 					res.render('detailsnophotonomap', {r: items[i], g: rnames});
 				});
 			} else {
-				db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+				db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
 					res.render('detailsnophoto', {r: items[i], g: rnames});
 				});
 			}
 		} 
-		db.collection("grades").find({r_id: req.query.id}).toArray(function(err,rnames){
+		db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
 			db.close();
 			res.render('details', {r: items[i], g: rnames});			
 		});
