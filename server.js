@@ -367,8 +367,8 @@ app.get('/showdetails', function(req,res) {
 				break;
 			}
 		}
-		if ((items[i].photomimetype != "application/jpg") && (!items[i].longtitude) || 
-		    (items[i].photomimetype != "application/jpg") && (!items[i].latitude)) {
+		if ((items[i].photomimetype == "application/pdf") && (!items[i].longtitude) || 
+		    (items[i].photomimetype == "application/pdf") && (!items[i].latitude)) {
 			db.collection("grade").find({r_id: req.query.id}).toArray(function(err,rnames){
 				res.render('detailsnophotonomap', {r: items[i], g: rnames});
 			});
