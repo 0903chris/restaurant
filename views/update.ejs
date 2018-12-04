@@ -36,19 +36,6 @@
       border: none;
   }
 </style>
-<p><script>
-var image = new Image();
-image.src="data:<%= r.photomimetype %>;base64,<%= r.photo %>" ;
-image.onload = function() {
-    // image exists and is loaded
-    document.body.appendChild(image);
-}
-image.onerror = function() {
-    // image did not load
-    var err = new Image();
-    document.body.appendChild(err);
-}
-</script></p>
    <body>
    
 
@@ -63,7 +50,7 @@ image.onerror = function() {
     	<p><label class="w3-label w3-validate">Borough: </label><br>
 	<input type="text" name="borough" value="<%= r.borough %>"></p>
     	<p><label class="w3-label w3-validate">Cuisine: </label><br>
-	<input type="text" name="cuisine"value="<%= r.cuisine %>></p>
+	<input type="text" name="cuisine"value="<%= r.cuisine %>"></p>
     	<p><label class="w3-label w3-validate">Street: </label><br>
 	<input type="text" name="street"value="<%= r.street %>"></p>
    	<p><label class="w3-label w3-validate">Building: </label><br>
